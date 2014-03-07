@@ -1,6 +1,6 @@
 class AddProjectStartDatetime < ActiveRecord::Migration
   def self.up
-    add_column :projects, :start_date, :datetime, :default => nil
+    add_column :projects, :start_date, :date, :default => nil
   end
 
   def self.down

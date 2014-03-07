@@ -1,0 +1,6 @@
+cs:
+  field_end_date: "Datum ukončení"
+  field_start_date: "Datum začátku"
+  field_effective_date: "Datum ukončení"
+  label_milestone_plural: "Milníky"
+  label_iteration_plural: "Iterace"

@@ -3,8 +3,8 @@ class CreateIterations < ActiveRecord::Migration
     create_table :iterations do |t|
       t.column :project_id, :integer
       t.column :name, :string
-      t.column :start_date, :datetime
-      t.column :end_date, :datetime
+      t.column :start_date, :date
+      t.column :end_date, :date
       t.column :description, :text
     end
 
