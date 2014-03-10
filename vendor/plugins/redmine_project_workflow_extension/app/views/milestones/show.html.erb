@@ -1,0 +1,13 @@
+<div class="contextual">
+  <%= link_to(l(:button_edit), edit_project_milestone_path(@project, @milestone, :back_url => url_for(:controller => :milestones, :action => :show, :project => @project, :milestone => @milestone)), :class => 'icon icon-edit') %>
+  <%= link_to(l(:button_delete), project_milestone_path(@project, @milestone), :confirm => l(:text_are_you_sure), :method => :delete, :class => 'icon icon-del') %>
+  <%= call_hook(:view_milestone_show_contextual, { :milestone => @milestone, :project => @project }) %>
+</div>
+
+<h2><%= h(@milestone.name) %></h2>
+
+<p><%= @milestone.description %></p>
+
+<%= call_hook :view_milestone_show_bottom, :milestone => @milestone %>
+
+<% html_title @milestone.name %>

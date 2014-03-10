@@ -31,6 +31,16 @@ Redmine::Plugin.register :redmine_project_workflow_extension do
   description 'Extension for redmine project workflow'
   version '0.0.1'
   url 'https://github.com/Strnadj/redmine13_project_workflow_extension'
-  author_url 'http://strnadj.github.io/'
+  author_url 'mailto:jan.strnadek@gmail.com'
   requires_redmine :version_or_higher => '1.3'
+
+  # Permissions
+  project_module :workflow_module do
+    permission :manage_milestones, {
+      :milestones => [ :new, :create, :update, :destroy, :show ]
+    }
+    permission :manage_iterations, {
+      :iterations => [ :create, :update, :destroy, :show ]
+    }
+  end
 end

@@ -13,6 +13,21 @@ class Iteration < ActiveRecord::Base
   # Validates
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => [ :project_id ]
-  validates_presence_of :start_date, :with => /^\d{4}-\d{2}-\d{2}$/, :message => :not_a_date, :allow_nil => false
-  validates_presence_of :end_date, :with => /^\d{4}-\d{2}-\d{2}$/, :message => :not_a_date, :allow_nil => false
+  validate :date_validation
+
+  # Overload compare operator
+  def <=>(iteration)
+    iteration.start_date <=> iteration.start_date
+  end
+
+  private
+
+    def date_validation
+      errors.add(:start_date, I18n.t("activerecord.errors.messages.not_a_date")) unless self[:start_date]
+      errors.add(:end_date, I18n.t("activerecord.errors.messages.not_a_date")) unless self[:end_date]
+
+      if self[:start_date] && self[:end_date] && self[:start_date] > self[:end_date]
+        errors.add(nil, I18n.t(:error_date_overleap))
+      end
+    end
 end

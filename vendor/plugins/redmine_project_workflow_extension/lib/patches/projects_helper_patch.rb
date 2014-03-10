@@ -15,6 +15,18 @@ module RedmineProjectWorkflowExtension
             tabs
           end
           alias_method_chain :project_settings_tabs, :more_tabs
+
+          # Link to milestone
+          def link_to_milestone(milestone, options = {})
+            return '' unless milestone && milestone.is_a?(Milestone)
+            link_to milestone.name, { :controller => :milestones, :action => :show, :id => milestone, :project_id => milestone.project }, options
+          end
+
+          # Link to version
+          def link_to_iteration(iteration, options = {})
+            return '' unless iteration && iteration.is_a?(Iteration)
+            link_to iteration.name, { :controller => :iterations, :action => :show, :id => iteration, :project_id => iteration.project }, options
+          end
         end
       end
     end

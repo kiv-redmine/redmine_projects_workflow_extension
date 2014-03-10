@@ -1,4 +1,22 @@
-# English strings go here for Rails i18n
 en:
   field_end_date: "End date"
   field_start_date: "Start date"
+  field_effective_date: "End date"
+
+  label_milestone: "Milestone"
+  field_milestone: "Milestone"
+  label_milestone_plural: "Milestones"
+  label_milestone_new: "New milestone"
+  label_milestone_name: "Name"
+
+  field_iteration: "Iteration"
+  label_iteration: "Iteration"
+  label_iteration_plural: "Iterations"
+  label_iteration_name: "Name"
+  label_iteration_new: "New iteration"
+
+  error_date_overleap: "Time overleaps!"
+
+  project_module_workflow_module: "Project workflow"
+  permission_manage_milestones: "Milestones managment"
+  permission_manage_iterations: "Iterations managment"

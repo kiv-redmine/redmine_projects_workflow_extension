@@ -1,5 +1,3 @@
-require_dependency 'issue'
-
 # Patches issue to add MILESTONE and ITERATIONS
 module RedmineProjectWorkflowExtension
   module Patches
@@ -18,7 +16,7 @@ module RedmineProjectWorkflowExtension
           safe_attributes 'milestone_id', 'iteration_id'
 
           # Validations - necessary presence of version/milestone/iteration
-          validates_presence_of :milestone_id, :iteration_id, :version_id
+          validates_presence_of :milestone, :iteration, :fixed_version
         end
        end
     end

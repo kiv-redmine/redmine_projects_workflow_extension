@@ -1,0 +1,13 @@
+<div class="contextual">
+  <%= link_to(l(:button_edit), edit_project_iteration_path(@project, @iteration, :back_url => url_for(:controller => :iterations, :action => :show, :project => @project, :iteration => @iteration)), :class => 'icon icon-edit') %>
+  <%= link_to(l(:button_delete), project_iteration_path(@project, @iteration), :confirm => l(:text_are_you_sure), :method => :delete, :class => 'icon icon-del') %>
+  <%= call_hook(:view_iteration_show_contextual, { :iteration => @iteration, :project => @project }) %>
+</div>
+
+<h2><%= h(@iteration.name) %></h2>
+
+<p><%= @iteration.description %></p>
+
+<%= call_hook :view_iteration_show_bottom, :iteration => @iteration %>
+
+<% html_title @iteration.name %>

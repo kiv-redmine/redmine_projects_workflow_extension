@@ -12,6 +12,11 @@
 * Add start date to project
 * Add start and end date to versions
 * Add milestones and iterations
+* Set version, milestone and iteration required
+
+## Screenshots &amp; Features
+
+
 
 ## How to contribute?
 

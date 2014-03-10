@@ -1,5 +1,6 @@
 class Milestone < ActiveRecord::Base
   unloadable
+  include Redmine::SafeAttributes
 
   # Belongs to project
   belongs_to :project
@@ -11,6 +12,22 @@ class Milestone < ActiveRecord::Base
   safe_attributes 'name', 'description', 'start_date', 'end_date', 'project_id'
 
   # Validates
-  validates_presence_of :name, :start_date, :end_date
+  validates_presence_of :name, :project
   validates_uniqueness_of :name, :scope => [ :project_id ]
+  validate :date_validation
+
+  # Overload compare operator
+  def <=>(milestone)
+    milestone.start_date <=> milestone.start_date
+  end
+
+  private
+    def date_validation
+      errors.add(:start_date, I18n.t("activerecord.errors.messages.not_a_date")) unless self[:start_date]
+      errors.add(:end_date, I18n.t("activerecord.errors.messages.not_a_date")) unless self[:end_date]
+
+      if self[:start_date] && self[:end_date] && self[:start_date] > self[:end_date]
+        errors.add(nil, I18n.t(:error_date_overleap))
+      end
+    end
 end

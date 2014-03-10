@@ -19,6 +19,10 @@ module RedmineProjectWorkflowExtension
         def date_validations
           errors.add(:start_date, I18n.t("activerecord.errors.messages.not_a_date")) unless self[:start_date]
           errors.add(:effective_date, I18n.t("activerecord.errors.messages.not_a_date")) unless self[:effective_date]
+
+          if self[:start_date] && self[:effective_date] && self[:start_date] > self[:effective_date]
+            errors.add(nil, I18n.t(:error_date_overleap))
+          end
         end
 
         # Weird behaviour

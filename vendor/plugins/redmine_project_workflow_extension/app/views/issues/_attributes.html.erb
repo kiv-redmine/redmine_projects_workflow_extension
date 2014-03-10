@@ -18,16 +18,17 @@
                      :title => l(:label_issue_category_new),
                      :tabindex => 199) if authorize_for('issue_categories', 'new') %></p>
 <% end %>
-<% unless @issue.assignable_versions.empty? %>
-<p><%= f.select :fixed_version_id, version_options_for_select(@issue.assignable_versions, @issue.fixed_version), :include_blank => true %>
-<%= prompt_to_remote(image_tag('add.png', :style => 'vertical-align: middle;'),
-                     l(:label_version_new),
-                     'version[name]',
-                     {:controller => 'versions', :action => 'create', :project_id => @project},
-                     :title => l(:label_version_new),
-                     :tabindex => 200) if authorize_for('versions', 'new') %>
+<p>
+  <%= f.select :fixed_version_id, version_options_for_select(@issue.assignable_versions, @issue.fixed_version), :include_blank => false, :required => true %>
+  <%= link_to l(:label_version_new), new_project_version_path(@project), :class => 'icon icon-add' if User.current.allowed_to?(:manage_versions, @project) %>
 </p>
-<% end %>
+<p>
+  <%= f.select :milestone_id, version_options_for_select(@issue.project.milestones, @issue.milestone), :include_blank => false, :required => true %>
+  <%= link_to l(:label_milestone_new), new_project_milestone_path(@project), :class => 'icon icon-add' %>
+</p>
+<p>
+  <%= f.select :iteration_id, version_options_for_select(@issue.project.iterations, @issue.iteration), :include_blank => false, :required => true %>
+  <%= link_to l(:label_iteration_new), new_project_iteration_path(@project), :class => 'icon icon-add' %>
 </div>
 
 <div class="splitcontentright">
