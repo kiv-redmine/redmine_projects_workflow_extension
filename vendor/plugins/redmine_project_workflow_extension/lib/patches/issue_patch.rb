@@ -14,9 +14,6 @@ module RedmineProjectWorkflowExtension
 
           # Add to safe attributes!
           safe_attributes 'milestone_id', 'iteration_id'
-
-          # Validations - necessary presence of version/milestone/iteration
-          validates_presence_of :milestone, :iteration, :fixed_version
         end
        end
     end
