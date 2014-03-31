@@ -13,6 +13,8 @@
 * Add start and end date to versions
 * Add milestones and iterations
 * Set version, milestone and iteration required
+* Show Milestones and Iterations in issue overview
+* Grouping / Filtering by Milestone / Iteration
 
 ## Screenshots &amp; Features
 
