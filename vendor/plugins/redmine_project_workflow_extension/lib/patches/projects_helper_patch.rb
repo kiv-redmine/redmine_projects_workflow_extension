@@ -7,11 +7,16 @@ module RedmineProjectWorkflowExtension
             tabs = project_settings_tabs_without_more_tabs
             index = tabs.index({:name => 'versions', :action => :manage_versions, :partial => 'projects/settings/versions', :label => :label_version_plural})
 
+            # Find project
+            project = Project.find(params[:id])
+
             # Insert after version!
-            if index
+            if (index && project.enabled_module_names.include?("workflow_module"))
               tabs.insert(index, {:name => "iterations", :action => :manage_iterations, :partial => "projects/settings/iterations", :label => :label_iteration_plural})
               tabs.insert(index, {:name => "milestones", :action => :manage_milestones, :partial => "projects/settings/milestones", :label => :label_milestone_plural})
             end
+
+            # Return tabs
             tabs
           end
           alias_method_chain :project_settings_tabs, :more_tabs

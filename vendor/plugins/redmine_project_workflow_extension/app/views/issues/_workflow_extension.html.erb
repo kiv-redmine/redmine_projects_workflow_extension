@@ -1,8 +1,10 @@
-<tr>
-  <th class="milestone"><%= l(:field_milestone)%>:</th>
-  <td class="milestone"><%= @issue.milestone ? link_to_milestone(@issue.milestone) : "-" %></td>
-</tr>
-<tr>
-  <th class="iteration"><%= l(:field_iteration)%>:</th>
-  <td class="iteration"><%= @issue.iteration ? link_to_iteration(@issue.iteration) : "-" %></td>
-</tr>
+<% if @project.enabled_module_names.include?("workflow_module") %>
+  <tr>
+    <th class="milestone"><%= l(:field_milestone)%>:</th>
+    <td class="milestone"><%= @issue.milestone ? link_to_milestone(@issue.milestone) : "-" %></td>
+  </tr>
+  <tr>
+    <th class="iteration"><%= l(:field_iteration)%>:</th>
+    <td class="iteration"><%= @issue.iteration ? link_to_iteration(@issue.iteration) : "-" %></td>
+  </tr>
+<% end %>

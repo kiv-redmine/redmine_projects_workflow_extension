@@ -6,6 +6,16 @@ ActionController::Dispatcher.to_prepare :redmine_project_workflow_extension do
   require_dependency 'project'
   require_dependency 'projects_helper'
   require_dependency 'issue'
+  require_dependency 'query'
+  require_dependency 'queries_helper'
+
+  unless QueriesHelper.included_modules.include?(RedmineProjectWorkflowExtension::Patches::QueriesHelperPatch)
+    QueriesHelper.send(:include, RedmineProjectWorkflowExtension::Patches::QueriesHelperPatch)
+  end
+
+  unless Query.included_modules.include?(RedmineProjectWorkflowExtension::Patches::QueryPatch)
+    Query.send(:include, RedmineProjectWorkflowExtension::Patches::QueryPatch)
+  end
 
   unless Issue.included_modules.include?(RedmineProjectWorkflowExtension::Patches::IssuePatch)
     Issue.send(:include, RedmineProjectWorkflowExtension::Patches::IssuePatch)

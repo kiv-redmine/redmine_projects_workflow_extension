@@ -22,13 +22,16 @@
   <%= f.select :fixed_version_id, version_options_for_select(@issue.assignable_versions, @issue.fixed_version), :include_blank => true, :required => false %>
   <%= link_to l(:label_version_new), new_project_version_path(@project), :class => 'icon icon-add' if User.current.allowed_to?(:manage_versions, @project) %>
 </p>
-<p>
-  <%= f.select :milestone_id, version_options_for_select(@issue.project.milestones, @issue.milestone), :include_blank => true, :required => false %>
-  <%= link_to l(:label_milestone_new), new_project_milestone_path(@project), :class => 'icon icon-add' %>
-</p>
-<p>
-  <%= f.select :iteration_id, version_options_for_select(@issue.project.iterations, @issue.iteration), :include_blank => true, :required => false %>
-  <%= link_to l(:label_iteration_new), new_project_iteration_path(@project), :class => 'icon icon-add' %>
+<% if @project.enabled_module_names.include?("workflow_module") %>
+  <p>
+    <%= f.select :milestone_id, version_options_for_select(@issue.project.milestones, @issue.milestone), :include_blank => true, :required => false %>
+    <%= link_to l(:label_milestone_new), new_project_milestone_path(@project), :class => 'icon icon-add' if User.current.allowed_to?(:manage_milestones, @project) %>
+  </p>
+  <p>
+    <%= f.select :iteration_id, version_options_for_select(@issue.project.iterations, @issue.iteration), :include_blank => true, :required => false %>
+    <%= link_to l(:label_iteration_new), new_project_iteration_path(@project), :class => 'icon icon-add' if User.current.allowed_to?(:manage_iterations, @project) %>
+  </p>
+<% end %>
 </div>
 
 <div class="splitcontentright">

@@ -15,8 +15,8 @@
     <td class="date"><%= format_date(iteration.end_date) %></td>
     <td class="description"><%=h iteration.description %></td>
     <td class="buttons">
-        <%= link_to l(:button_edit), edit_project_iteration_path(@project, iteration), :class => 'icon icon-edit' %>
-        <%= link_to l(:button_delete), project_iteration_path(@project, iteration), :confirm => l(:text_are_you_sure), :method => :delete, :class => 'icon icon-del' %>
+        <%= link_to l(:button_edit), edit_project_iteration_path(@project, iteration), :class => 'icon icon-edit' if User.current.allowed_to?(:manage_iterations, @project) %>
+        <%= link_to l(:button_delete), project_iteration_path(@project, iteration), :confirm => l(:text_are_you_sure), :method => :delete, :class => 'icon icon-del' if User.current.allowed_to?(:manage_iterations, @project) %>
      </td>
     </tr>
 <% end; reset_cycle %>
@@ -26,4 +26,4 @@
 <p class="nodata"><%= l(:label_no_data) %></p>
 <% end %>
 
-<p><%= link_to l(:label_iteration_new), new_project_iteration_path(@project), :class => 'icon icon-add' %></p>
+<p><%= link_to l(:label_iteration_new), new_project_iteration_path(@project), :class => 'icon icon-add' if User.current.allowed_to?(:manage_iterations, @project) %></p>
