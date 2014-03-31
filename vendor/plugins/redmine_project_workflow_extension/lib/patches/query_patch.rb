@@ -49,8 +49,8 @@ module RedmineProjectWorkflowExtension
             @available_columns_milestones = available_columns_without_iterations_and_milestones
 
             # Add variables
-            @available_columns_milestones << QueryColumn.new(:milestone, :sortable => "#{Milestone.table_name}.start_date", :groupable => true)
-            @available_columns_milestones << QueryColumn.new(:iteration, :sortable => "#{Iteration.table_name}.start_date", :groupable => true)
+            @available_columns_milestones << QueryColumn.new(:milestone, :sortable => "#{Milestone.table_name}.name", :groupable => true)
+            @available_columns_milestones << QueryColumn.new(:iteration, :sortable => "#{Iteration.table_name}.name", :groupable => true)
 
             # Return
             @available_columns_milestones
