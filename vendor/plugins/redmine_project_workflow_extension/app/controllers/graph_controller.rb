@@ -1,10 +1,25 @@
 class GraphController < ApplicationController
   # Find project
   before_filter :find_project_by_project_id
+  before_filter :authorize
 
   # Show graphs
   def burndown
+    # Get versions
+    @milestones = @project.milestones
+    @iterations = @project.iterations
 
+    # Prepare plot bands!
+    @plotBands = []
+
+    @project.versions.all.each do |version|
+      @plotBands << {
+        :from => "Date.UTC(#{version[:start_date].strftime("%Y, %m, %d")})",
+        :to   => "Date.UTC(#{version.due_date.strftime("%Y, %m, %d")})",
+        :label => version.name,
+        :color => 'rgba(68, 170, 213, .2)'
+      }
+    end
   end
 
   # Issue status

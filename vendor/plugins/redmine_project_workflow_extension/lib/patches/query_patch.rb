@@ -71,7 +71,7 @@ module RedmineProjectWorkflowExtension
                              :limit  => options[:limit],
                              :offset => options[:offset]
           rescue ::ActiveRecord::StatementInvalid => e
-            raise StatementInvalid.new(e.message)
+            raise ::ActiveRecord::StatementInvalid.new(e.message)
           end
         end
        end

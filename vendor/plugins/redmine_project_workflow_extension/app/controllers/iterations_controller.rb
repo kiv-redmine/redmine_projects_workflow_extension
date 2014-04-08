@@ -1,4 +1,5 @@
 class IterationsController < ApplicationController
+  # Find project & find iteration for edit actions
   before_filter :find_project, :only => [:index, :new, :create, :show]
   before_filter :find_iteration, :only => [ :show, :edit, :update, :destroy ]
   before_filter :authorize

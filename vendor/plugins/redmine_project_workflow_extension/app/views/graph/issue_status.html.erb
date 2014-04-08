@@ -9,13 +9,25 @@
 
 <script type="text/javascript">
 document.observe('dom:loaded', function(){
+        Highcharts.getOptions().colors = Highcharts.map(Highcharts.getOptions().colors, function(color) {
+        return {
+            radialGradient: { cx: 0.5, cy: 0.3, r: 0.7 },
+            stops: [
+                [0, color],
+                [1, Highcharts.Color(color).brighten(-0.3).get('rgb')] // darken
+            ]
+        };
+    });
 var chart = new Highcharts.Chart({
   chart: {
     renderTo: 'container',
-    type: 'pie'
+    type: 'pie',
+    plotBackgroundColor: null,
+    plotBorderWidth: null,
+    plotShadow: false
   },
   title: {
-    text: '<%= l(:label_issue_status_chart) %>'
+    text: ''
   },
   tooltip: {
     pointFormat: '<b>{point.percentage:.1f} %</b>'
