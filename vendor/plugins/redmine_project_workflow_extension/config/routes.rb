@@ -3,4 +3,7 @@ ActionController::Routing::Routes.draw do |map|
     project.resources :milestones
     project.resources :iterations
   end
+
+  # Graph routes
+  map.connect 'projects/:project_id/graphs/:action', :controller => :graph
 end

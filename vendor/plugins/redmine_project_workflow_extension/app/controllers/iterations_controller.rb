@@ -1,7 +1,7 @@
 class IterationsController < ApplicationController
   before_filter :find_project, :only => [:index, :new, :create, :show]
   before_filter :find_iteration, :only => [ :show, :edit, :update, :destroy ]
-  #TODO:: Remove after fix permissions before_filter :authorize
+  before_filter :authorize
 
   def index
     respond_to do |format|

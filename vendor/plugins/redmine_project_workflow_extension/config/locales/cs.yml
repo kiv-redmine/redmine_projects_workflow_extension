@@ -15,8 +15,13 @@ cs:
   label_iteration_name: "Název"
   label_iteration_new: "Nová iterace"
 
+  label_charts_menu: "Grafy"
+  label_burndown_chart: "Burndown graf"
+  label_issue_status_chart: "Stav úkolů"
+
   error_date_overleap: "Začátek musí být dříve než konec!"
 
   project_module_workflow_module: "Projektové workflow"
   permission_manage_milestones: "Správa milníků"
   permission_manage_iterations: "Správa iterací"
+  permission_manage_view_graphs: "Zobrazit grafy"

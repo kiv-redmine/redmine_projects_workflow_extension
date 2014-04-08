@@ -9,6 +9,10 @@ en:
   label_milestone_new: "New milestone"
   label_milestone_name: "Name"
 
+  label_charts_menu: "Charts"
+  label_burndown_chart: "Burndown chart"
+  label_issue_status_chart: "Issues status"
+
   field_iteration: "Iteration"
   label_iteration: "Iteration"
   label_iteration_plural: "Iterations"
@@ -20,3 +24,4 @@ en:
   project_module_workflow_module: "Project workflow"
   permission_manage_milestones: "Milestones managment"
   permission_manage_iterations: "Iterations managment"
+  permission_manage_view_graphs: "View graphs"

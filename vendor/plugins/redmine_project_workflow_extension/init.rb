@@ -44,13 +44,22 @@ Redmine::Plugin.register :redmine_project_workflow_extension do
   author_url 'mailto:jan.strnadek@gmail.com'
   requires_redmine :version_or_higher => '1.3'
 
+  # Menu view Graphs in project menu
+  menu :project_menu, :charts, { :controller => :graph, :action => :burndown }, :caption => :label_charts_menu, :after => :new_issue, :param => :project_id
+
   # Permissions
   project_module :workflow_module do
+    # Permission for view graphs
+    permission :view_graphs, { :graph => [:burndown, :issue_status] }, :require => :loggedin
+
+    # Manage milestones permission
     permission :manage_milestones, {
       :milestones => [ :new, :create, :update, :destroy, :show ]
     }
+
+    # Manage iterations
     permission :manage_iterations, {
-      :iterations => [ :create, :update, :destroy, :show ]
+      :iterations => [ :new, :create, :update, :destroy, :show ]
     }
   end
 end
