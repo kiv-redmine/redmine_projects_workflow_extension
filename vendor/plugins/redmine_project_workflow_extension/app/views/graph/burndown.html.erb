@@ -7,13 +7,60 @@
 <h2><%= l(:label_burndown_chart) %></h2>
 
 <script type="text/javascript">
+var chart;
 document.observe('dom:loaded', function(){
-var chart = new Highcharts.Chart({
+    var $tooltip = $('tooltip');
+    $tooltip.hide();
+    var $text = $('tooltiptext');
+    displayTooltip = function (text, left) {
+        $text.innerText = text;
+        $tooltip.show();
+        $tooltip.attributes['style'].value = 'left: ' + parseInt(left)  + 'px';
+    };
+    var timer;
+    hideTooltip = function (e) {
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+            $tooltip.hide();
+        }, 2500);
+    };
+
+    function hideAll() {
+      <%= print_remove_plot_bands("chart", @milestones) %>
+      <%= print_remove_plot_bands("chart", @versions) %>
+      <%= print_remove_plot_bands("chart", @iterations) %>
+    }
+
+    /** Observe check boxes for displaying / hiding project versions */
+    $$(".chart_options input").each(function(e) {
+      $(e.id).observe('click', function(e) {
+        hideAll();
+        if (this.checked) {
+          /* Display milestones|versions|iterations */
+          switch (this.id) {
+            case "show_milestones":
+            <%= print_create_plot_bands("chart", @milestones) %>
+            break;
+
+            case "show_iterations":
+            <%= print_create_plot_bands("chart", @iterations) %>
+            break;
+
+            case "show_versions":
+            <%= print_create_plot_bands("chart", @versions) %>
+            break;
+          }
+        }
+      });
+    });
+
+/* Create char */
+chart = new Highcharts.Chart({
   chart: {
     renderTo: 'container'
   },
   title: {
-    text: '<%= l(:label_burndown_chart) %>'
+    text: ''
   },
   legend: {
     layout: 'vertical',
@@ -23,14 +70,9 @@ var chart = new Highcharts.Chart({
   },
   xAxis: {
     title: {
-      text: 'Data'
+      text: 'Datumy'
     },
-    plotBands: [
-      <% @plotBands.each do |pb| %>
-        { from: <%= pb[:from] %>, to: <%= pb[:to] %>, label: "<%= pb[:label] %>", color: "<%= pb[:color] %>" },
-      <% end %>
-    ],
-    tickInterval: 24 * 3600 * 1000,
+    tickPixelInterval: 100,
     type: 'datetime'
   },
   yAxis: {
@@ -38,19 +80,47 @@ var chart = new Highcharts.Chart({
         text: 'Hodiny'
     }
   },
-series: [
-        { name: "Odhadovana doba", data: [
-          [ Date.UTC(2014, 03, 25), 45 ],
-          [ Date.UTC(2014, 05, 03), 0 ]
-          ]},
-        { name: "Skutecna doba", data: [
-          [ Date.UTC(2014, 03, 28), 45 ],
-          [ Date.UTC(2014, 04, 1), 38 ],
-          [ Date.UTC(2014, 04, 10), 28 ],
-          [ Date.UTC(2014, 04, 15), 18 ]
-          ]}
+  series: [
+          { name: "Odhadovana doba", data: [ <%= print_chart_line(@ideal_line) %> ] }
         ]
   });
 });
 </script>
-<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+  <style type="text/css">
+    .thetooltip {
+        border: 1px solid #2f7ed8;
+        background-color: #fff;
+        opacity: 0.8500000000000001;
+        padding: 4px 12px;
+        border-radius: 3px;
+        position: absolute;
+        top:100px;
+        box-shadow: 1px 1px 3px #666;
+        z-index: 1000;
+    }
+  </style>
+<div id="burndown_chart" class="box" style="position: relative;">
+  <div id="tooltip" class="thetooltip">
+      <p id="tooltiptext" style="margin:0">default</p>
+  </div>
+  <div class="chart_options" style="width: 100%; text-align: center;">
+    <strong><%= l(:label_show_project_attributes) %>:</strong>&nbsp;
+    <label>
+      <input type="radio" name="show" id="show_milestones" />
+      <%= l(:label_milestone_plural) %>
+    </label>
+    <label>
+      <input type="radio" name="show" id="show_versions" />
+      <%= l(:label_version_plural) %>
+    </label>
+    <label>
+      <input type="radio" name="show" id="show_iterations" />
+      <%= l(:label_iteration_plural) %>
+    </label>
+    <label>
+      <input type="radio" name="show" id="hide_all" checked="checked" />
+      <%= l(:label_hide_all_attributes) %>
+    </label>
+  </div>
+  <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto; z-index: 1;"></div>
+</div>

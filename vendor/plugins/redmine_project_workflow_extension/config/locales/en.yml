@@ -3,6 +3,9 @@ en:
   field_start_date: "Start date"
   field_effective_date: "End date"
 
+  label_show_project_attributes: 'Show'
+  label_hide_all_attributes: 'Hide all'
+
   label_milestone: "Milestone"
   field_milestone: "Milestone"
   label_milestone_plural: "Milestones"
