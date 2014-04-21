@@ -17,6 +17,15 @@
 * Grouping / Filtering by Milestone / Iteration
 * Burndown and Issue status charts
 
+## Features left
+
+* Chart filter
+* Ajax chart loading
+* Code cleaning
+* Iteration rights bug
+* Generating chart on empty project
+* Update readme
+
 ## Reconstruction burndown data
 
 There is two rake tasks for regenerate old data from project for
