@@ -81,7 +81,8 @@ chart = new Highcharts.Chart({
     }
   },
   series: [
-          { name: "Odhadovana doba", data: [ <%= print_chart_line(@ideal_line) %> ] }
+          { name: "Odhadovana doba", data: [ <%= print_chart_line(@ideal_line) %> ] },
+          { name: "Skutecna doba", data: [ <%= print_records(@current_line) %> ]}
         ]
   });
 });

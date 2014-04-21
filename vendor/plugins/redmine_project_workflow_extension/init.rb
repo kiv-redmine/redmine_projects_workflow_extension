@@ -7,7 +7,17 @@ ActionController::Dispatcher.to_prepare :redmine_project_workflow_extension do
   require_dependency 'projects_helper'
   require_dependency 'issue'
   require_dependency 'query'
+  require_dependency 'time_entry'
   require_dependency 'queries_helper'
+  require_dependency 'journal'
+
+  unless TimeEntry.included_modules.include?(RedmineProjectWorkflowExtension::Patches::TimeEntryPatch)
+    TimeEntry.send(:include, RedmineProjectWorkflowExtension::Patches::TimeEntryPatch)
+  end
+
+  unless Journal.included_modules.include?(RedmineProjectWorkflowExtension::Patches::JournalPatch)
+    Journal.send(:include, RedmineProjectWorkflowExtension::Patches::JournalPatch)
+  end
 
   unless QueriesHelper.included_modules.include?(RedmineProjectWorkflowExtension::Patches::QueriesHelperPatch)
     QueriesHelper.send(:include, RedmineProjectWorkflowExtension::Patches::QueriesHelperPatch)

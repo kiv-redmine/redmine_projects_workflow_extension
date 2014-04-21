@@ -1,3 +1,8 @@
+# encoding: utf-8
+
+# Part of Redmine Project Workflow Extension - 1.3 plugin
+# author: strnadj <jan.strnadek@gmail.com>
+
 class Iteration < ActiveRecord::Base
   include Redmine::SafeAttributes
 

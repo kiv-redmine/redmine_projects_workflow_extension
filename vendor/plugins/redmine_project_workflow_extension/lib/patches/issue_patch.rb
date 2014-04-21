@@ -14,6 +14,16 @@ module RedmineProjectWorkflowExtension
 
           # Add to safe attributes!
           safe_attributes 'milestone_id', 'iteration_id'
+
+          # After create - update project times
+          after_create :update_burndown_record
+          after_destroy :update_burndown_record
+
+          def update_burndown_record
+            unless estimated_hours.blank?
+              BurndownRecord.update_project_start(project)
+            end
+          end
         end
        end
     end

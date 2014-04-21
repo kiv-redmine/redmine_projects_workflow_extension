@@ -26,6 +26,23 @@ module GraphHelper
     data.html_safe
   end
 
+  def print_records(array)
+    # Total hours
+    total_hours = 0
+
+    # Return array
+    data = []
+
+    # Iterate
+    array.each do |rec|
+      total_hours = (total_hours + rec.add_time - rec.sub_time).to_f.round(2)
+      data << " [ #{date_to_json(rec.day)}, #{total_hours} ] "
+    end
+
+    # Return
+    data.join(', ').html_safe
+  end
+
   def print_create_plot_bands(chart, array)
     # Prepare data
     data = ""
@@ -35,7 +52,7 @@ module GraphHelper
       data << "#{chart}.xAxis[0].addPlotBand({ " +
                 "from: #{item[:from]}, to: #{item[:to]}, id: \"#{item[:id]}\"," +
                 "color: \"#{item[:color]}\", " +
-                "events: { mouseover: function (e) { displayTooltip('#{item[:label]}', this.svgElem.d.split(' ')[1]); }, mouseout: hideTooltip }" +
+                "events: { mouseover: function (e) { displayTooltip('#{item[:label]}', this.svgElem.d.split(' ')[1] + this.svgElem.d.split(' ')[0]); }, mouseout: hideTooltip }" +
       "});"
     end
 

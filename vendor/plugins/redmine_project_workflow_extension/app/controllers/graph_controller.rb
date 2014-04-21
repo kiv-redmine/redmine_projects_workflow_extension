@@ -39,9 +39,12 @@ class GraphController < ApplicationController
     } }
 
     # Start date
-    @start_date = @project[:start_date].is_a?(Time) ? @project[:start_date].to_datetime : @project[:start_date]
-    @end_date   = @project[:end_date].is_a?(Time) ? @project[:end_date].to_datetime : @project[:end_date]
-    @total_hours = 800
+    @start_date = @project.get_start_date
+    @end_date   = @project.get_end_date
+
+    # Get total hours from init
+    init_rec = @project.burndown_records.find(:first, :conditions => [ "init_project = ?", true ])
+    @total_hours = init_rec.add_time
 
     # Callculate straight line
     @ideal_line = []
@@ -109,6 +112,9 @@ class GraphController < ApplicationController
 
     # Add ideal line
     @ideal_line << [ date_to_json(@end_date), 0 ]
+
+    # Current line
+    @current_line = @project.burndown_records
   end
 
   # Issue status

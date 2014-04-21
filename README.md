@@ -15,6 +15,24 @@
 * Set version, milestone and iteration required
 * Show Milestones and Iterations in issue overview
 * Grouping / Filtering by Milestone / Iteration
+* Burndown and Issue status charts
+
+## Reconstruction burndown data
+
+There is two rake tasks for regenerate old data from project for
+burndown.
+
+*For one project:*
+
+```ruby
+RAILS_ENV=production rake burndown:generate PROJECT=project_identifier
+```
+
+*For all project:*
+
+```ruby
+RAILS_ENV=production rake burndown:generate_all
+```
 
 ## Screenshots &amp; Features
 
