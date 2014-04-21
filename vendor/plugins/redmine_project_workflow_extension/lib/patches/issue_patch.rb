@@ -21,11 +21,12 @@ module RedmineProjectWorkflowExtension
 
           def update_burndown_record
             unless estimated_hours.blank?
+              Rails.logger.info "[BURNDOWN] Update \"#{project.identifier}\" start"
               BurndownRecord.update_project_start(project)
             end
           end
         end
-       end
+      end
     end
   end
 end

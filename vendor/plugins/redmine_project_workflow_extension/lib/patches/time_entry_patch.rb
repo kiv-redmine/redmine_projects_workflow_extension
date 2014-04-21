@@ -10,9 +10,11 @@ module RedmineProjectWorkflowExtension
         base.class_eval do
           # After sav update burndown records
           after_save :update_burndown_record
+          after_destroy :update_burndown_record
 
           # Update sub_time records
           def update_burndown_record
+            Rails.logger.info "[BURNDOWN] Update \"#{project.identifier}\" sub time"
             BurndownRecord.update_project_sub_time(project, spent_on)
           end
         end
