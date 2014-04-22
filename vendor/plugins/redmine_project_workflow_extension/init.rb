@@ -65,16 +65,18 @@ Redmine::Plugin.register :redmine_project_workflow_extension do
   # Permissions
   project_module :workflow_module do
     # Permission for view graphs
-    permission :view_graphs, { :graph => [:burndown, :issue_status] }, :require => :loggedin
+    permission :view_graphs, {
+      :graph => [:burndown, :issue_status]
+    }, :require => :loggedin
 
     # Manage milestones permission
     permission :manage_milestones, {
-      :milestones => [ :new, :create, :update, :destroy, :show ]
+      :milestones => [ :new, :create, :edit, :update, :destroy, :show ]
     }
 
     # Manage iterations
     permission :manage_iterations, {
-      :iterations => [ :new, :create, :update, :destroy, :show ]
+      :iterations => [ :new, :create, :edit, :update, :destroy, :show ]
     }
   end
 end

@@ -1,5 +1,5 @@
 class MilestonesController < ApplicationController
-  before_filter :find_project, :only => [:index, :new, :create, :show]
+  before_filter :find_project, :only => [ :index, :new, :create ]
   before_filter :find_milestone, :only => [ :show, :edit, :update, :destroy ]
   before_filter :authorize
 
@@ -97,12 +97,14 @@ class MilestonesController < ApplicationController
 
   def find_milestone
     @milestone = Milestone.find(params[:id])
+    @project   = @milestone.project
   rescue ActiveRecord::RecordNotFound
     render_404
   end
 
   def find_project
-    @project = Project.find(params[:project_id])
+    project_id = (params[:milestone] && params[:milestone][:project_id]) || params[:project_id]
+    @project = Project.find(project_id)
   rescue ActiveRecord::RecordNotFound
     render_404
   end

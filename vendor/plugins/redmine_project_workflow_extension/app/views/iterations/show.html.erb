@@ -6,7 +6,13 @@
 
 <h2><%= h(@iteration.name) %></h2>
 
-<p><%= @iteration.description %></p>
+<p>
+<ul>
+  <li><%= @iteration.description %></li>
+  <li><strong><%= t(:field_start_date) %>:</strong> <%= format_date(@iteration.start_date) %></li>
+  <li><strong><%= t(:field_end_date) %>:</strong> <%= format_date(@iteration.end_date) %></li>
+</ul>
+</p>
 
 <%= call_hook :view_iteration_show_bottom, :iteration => @iteration %>
 

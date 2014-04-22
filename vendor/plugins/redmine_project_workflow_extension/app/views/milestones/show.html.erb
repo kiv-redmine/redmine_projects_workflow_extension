@@ -6,7 +6,13 @@
 
 <h2><%= h(@milestone.name) %></h2>
 
-<p><%= @milestone.description %></p>
+<p>
+<ul>
+  <li><%= @milestone.description %></li>
+  <li><strong><%= t(:field_start_date) %>:</strong> <%= format_date(@milestone.start_date) %></li>
+  <li><strong><%= t(:field_end_date) %>:</strong> <%= format_date(@milestone.end_date) %></li>
+</ul>
+</p>
 
 <%= call_hook :view_milestone_show_bottom, :milestone => @milestone %>
 

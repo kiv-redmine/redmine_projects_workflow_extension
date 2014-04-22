@@ -16,13 +16,13 @@
 * Show Milestones and Iterations in issue overview
 * Grouping / Filtering by Milestone / Iteration
 * Burndown and Issue status charts
+* Rights settings for view charts, edit iterations or milestones
 
 ## Features left
 
 * Chart filter
 * Ajax chart loading
 * Code cleaning
-* Iteration rights bug
 * Update readme
 
 ## Reconstruction burndown data

@@ -1,8 +1,8 @@
 class IterationsController < ApplicationController
   # Find project & find iteration for edit actions
-  before_filter :find_project, :only => [:index, :new, :create, :show]
+  before_filter :find_project, :only => [ :index, :new, :create ]
   before_filter :find_iteration, :only => [ :show, :edit, :update, :destroy ]
-  #before_filter :authorize
+  before_filter :authorize
 
   def index
     respond_to do |format|
@@ -98,12 +98,14 @@ class IterationsController < ApplicationController
 
   def find_iteration
     @iteration = Iteration.find(params[:id])
+    @project   = @iteration.project
   rescue ActiveRecord::RecordNotFound
     render_404
   end
 
   def find_project
-    @project = Project.find(params[:project_id])
+    project_id = (params[:iteration] && params[:iteration][:project_id]) || params[:project_id]
+    @project = Project.find(project_id)
   rescue ActiveRecord::RecordNotFound
     render_404
   end
