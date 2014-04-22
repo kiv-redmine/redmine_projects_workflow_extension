@@ -1,4 +1,8 @@
-# Patches issue to add MILESTONE and ITERATIONS
+# encoding: utf-8
+
+# Part of Redmine Project Workflow Extension - 1.3 plugin
+# author: strnadj <jan.strnadek@gmail.com>
+
 module RedmineProjectWorkflowExtension
   module Patches
     module IssuePatch
@@ -20,10 +24,7 @@ module RedmineProjectWorkflowExtension
           after_destroy :update_burndown_record
 
           def update_burndown_record
-            unless estimated_hours.blank?
-              Rails.logger.info "[BURNDOWN] Update \"#{project.identifier}\" start"
-              BurndownRecord.update_project_start(project)
-            end
+            BurndownRecord.update_project_start(project) unless estimated_hours.blank?
           end
         end
       end

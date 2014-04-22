@@ -5,19 +5,14 @@
 
 module RedmineProjectWorkflowExtension
   module Patches
-    module JournalDetailPatch
+    module JournalPatch
       def self.included(base)
         base.class_eval do
-          after_create  :update_burndown_records
           after_destroy :update_burndown_records
 
           def update_burndown_records
-            if prop_key == "estimated_hours" && project = journal.issue.try(:project)
-              if old_value
-                BurndownRecord.update_project_add_time(project, journal.created_on)
-              else
-                BurndownRecord.update_project_start(project)
-              end
+            if issue
+              BurndownRecord.update_project_add_time(issue.project, created_on)
             end
           end
         end
