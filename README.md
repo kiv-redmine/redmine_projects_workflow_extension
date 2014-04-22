@@ -23,7 +23,6 @@
 * Ajax chart loading
 * Code cleaning
 * Iteration rights bug
-* Generating chart on empty project
 * Update readme
 
 ## Reconstruction burndown data

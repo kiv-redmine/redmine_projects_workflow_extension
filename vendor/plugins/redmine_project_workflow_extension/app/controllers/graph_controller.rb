@@ -44,6 +44,13 @@ class GraphController < ApplicationController
 
     # Get total hours from init
     init_rec = @project.burndown_records.find(:first, :conditions => [ "init_project = ?", true ])
+
+    # Create init rec
+    unless init_rec
+      BurndownRecord.update_project_start(@project)
+      init_rec = @project.burndown_records.find(:first, :conditions => [ "init_project = ?", true ])
+    end
+
     @total_hours = init_rec.add_time
 
     # Callculate straight line
