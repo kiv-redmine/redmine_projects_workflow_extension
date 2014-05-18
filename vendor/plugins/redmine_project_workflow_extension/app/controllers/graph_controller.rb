@@ -62,7 +62,7 @@ class GraphController < ApplicationController
       start_date = @start_date.advance(:days => (8 - @start_date.cwday))
 
       # Add start date point
-      @ideal_line << [ date_to_json(date), @total_hours ]
+      @ideal_line << [ date_to_json(start_date), @total_hours ]
     else
       start_date = @start_date
     end

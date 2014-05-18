@@ -17,6 +17,7 @@
 * Grouping / Filtering by Milestone / Iteration
 * Burndown and Issue status charts
 * Rights settings for view charts, edit iterations or milestones
+* Advanced roadmap - iterations/milestones/versions
 
 ## Features left
 
@@ -53,6 +54,10 @@ RAILS_ENV=production rake burndown:generate_all
 
 ### Issue status
 <img src="https://raw.github.com/Strnadj/redmine13_project_workflow_extension/master/readme_data/issue_status.png" alt="Issue status"  style="box-shadow: 5px 5px rgba(0, 0, 0, .5);" />
+
+### Advanced roadmap
+
+<img src="https://raw.github.com/Strnadj/redmine13_project_workflow_extension/master/readme_data/roadmap.png" alt="Project roadmap"  style="box-shadow: 5px 5px rgba(0, 0, 0, .5);" />
 
 ### Project start date
 

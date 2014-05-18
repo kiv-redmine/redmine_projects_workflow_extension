@@ -1,0 +1,10 @@
+<% @iterations.each do |iteration| %>
+  <h3 class="version"><%= tag 'a', :name => h(iteration.name) %><%= link_to_iteration iteration %></h3>
+  <%= render :partial => 'iterations/overview', :locals => { :iteration => iteration } %>
+
+  <% if (issues = @issues_by_iteration[iteration]) && issues.size > 0 %>
+    <%= render :partial => 'versions/issues_overview', :locals => { :issues => issues } %>
+  <% end %>
+
+  <%= call_hook :view_projects_roadmap_iteration_bottom, :iteration => iteration %>
+<% end %>

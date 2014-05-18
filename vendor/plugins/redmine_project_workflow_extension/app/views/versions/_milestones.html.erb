@@ -1,0 +1,10 @@
+<% @milestones.each do |milestone| %>
+  <h3 class="version"><%= tag 'a', :name => h(milestone.name) %><%= link_to_milestone milestone %></h3>
+  <%= render :partial => 'milestones/overview', :locals => { :milestone => milestone } %>
+
+  <% if (issues = @issues_by_milestone[milestone]) && issues.size > 0 %>
+    <%= render :partial => 'versions/issues_overview', :locals => { :issues => issues } %>
+  <% end %>
+
+  <%= call_hook :view_projects_roadmap_milestone_bottom, :milestone => milestone %>
+<% end %>

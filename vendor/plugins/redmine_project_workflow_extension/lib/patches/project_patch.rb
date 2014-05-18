@@ -26,6 +26,18 @@ module RedmineProjectWorkflowExtension
        end
 
       module InstanceMethods
+        def rolled_up_milestones
+          @rolled_up_milestones ||=
+            Milestone.scoped(:include => :project,
+                     :conditions => ["#{Project.table_name}.lft >= ? AND #{Project.table_name}.rgt <= ? AND #{Project.table_name}.status = #{::Project::STATUS_ACTIVE}", lft, rgt])
+        end
+
+        def rolled_up_iterations
+          @rolled_up_iterations ||=
+            Iteration.scoped(:include => :project,
+                     :conditions => ["#{Project.table_name}.lft >= ? AND #{Project.table_name}.rgt <= ? AND #{Project.table_name}.status = #{::Project::STATUS_ACTIVE}", lft, rgt])
+        end
+
         def get_sub_time(date)
           TimeEntry.sum(:hours, :conditions => [ "project_id = ? AND spent_on = ?", self.id, date ]).to_f.round(3)
         end

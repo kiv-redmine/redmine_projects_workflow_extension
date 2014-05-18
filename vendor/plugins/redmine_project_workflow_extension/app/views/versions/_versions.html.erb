@@ -1,0 +1,11 @@
+<% @versions.each do |version| %>
+  <h3 class="version"><%= tag 'a', :name => h(version.name) %><%= link_to_version version %></h3>
+  <%= render :partial => 'versions/overview', :locals => {:version => version} %>
+  <%= render(:partial => "wiki/content", :locals => {:content => version.wiki_page.content}) if version.wiki_page %>
+
+  <% if (issues = @issues_by_version[version]) && issues.size > 0 %>
+    <%= render :partial => 'versions/issues_overview', :locals => { :issues => issues } %>
+  <% end %>
+
+  <%= call_hook :view_projects_roadmap_version_bottom, :version => version %>
+<% end %>

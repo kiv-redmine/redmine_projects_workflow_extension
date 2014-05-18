@@ -1,3 +1,7 @@
+# encoding: utf-8
+
+# Part of Redmine Project Workflow Extension - 1.3 plugin
+# author: strnadj <jan.strnadek@gmail.com>
 require 'redmine'
 require 'dispatcher'
 
@@ -11,6 +15,11 @@ ActionController::Dispatcher.to_prepare :redmine_project_workflow_extension do
   require_dependency 'query'
   require_dependency 'time_entry'
   require_dependency 'queries_helper'
+  require_dependency 'versions_controller'
+
+  unless VersionsController.included_modules.include?(RedmineProjectWorkflowExtension::Patches::VersionsControllerPatch)
+    VersionsController.send(:include, RedmineProjectWorkflowExtension::Patches::VersionsControllerPatch)
+  end
 
   unless Journal.included_modules.include?(RedmineProjectWorkflowExtension::Patches::JournalPatch)
     Journal.send(:include, RedmineProjectWorkflowExtension::Patches::JournalPatch)

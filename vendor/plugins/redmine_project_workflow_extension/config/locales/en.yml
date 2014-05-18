@@ -12,6 +12,8 @@ en:
   label_milestone_new: "New milestone"
   label_milestone_name: "Name"
 
+  label_roadmap_by: "Roadmap type"
+
   label_charts_menu: "Charts"
   label_burndown_chart: "Burndown chart"
   label_issue_status_chart: "Issues status"

@@ -1,0 +1,103 @@
+<div class="contextual">
+  <% if @roadmap_type == "versions" %>
+    <%= link_to l(:label_version_new), new_project_version_path(@project), :class => 'icon icon-add' if User.current.allowed_to?(:manage_versions, @project) %>
+  <% end %>
+  <% if @roadmap_type == "milestones" %>
+    <%= link_to l(:label_milestone_new), new_project_milestone_path(@project), :class => 'icon icon-add' if User.current.allowed_to?(:manage_milestones, @project) %>
+  <% end %>
+  <% if @roadmap_type == "iterations" %>
+    <%= link_to l(:label_iteration_new), new_project_iteration_path(@project), :class => 'icon icon-add' if User.current.allowed_to?(:manage_iterations, @project) %>
+  <% end %>
+</div>
+
+<h2><%=l(:label_roadmap)%></h2>
+
+<!-- FILTERS -->
+<% form_tag({:controller => 'versions', :action => 'index', :project_id => @project}, :method => :get, :id => 'roadmap_by_form') do %>
+  <fieldset id="show_by" class="collapsible">
+    <legend onlick="toggleFieldset(this);"><%= l(:label_roadmap_by) %></legend>
+    <div>
+      <table>
+        <tbody>
+          <tr>
+            <td>
+              <input type="radio" id="roadmap_type_versions" name="roadmap_type" value="versions" <% if @roadmap_type == "versions" %>checked="checked"<% end %> />
+              <label for="roadmap_type_versions"><%= l(:label_version_plural) %></label>
+            </td>
+            <td>
+              <input type="radio" id="roadmap_type_milestones" name="roadmap_type" value="milestones" <% if @roadmap_type == "milestones" %>checked="checked"<% end %> />
+              <label for="roadmap_type_milestones"><%= l(:label_milestone_plural) %></label>
+            </td>
+            <td>
+              <input type="radio" id="roadmap_type_iterations" name="roadmap_type" value="iterations" <% if @roadmap_type == "iterations" %>checked="checked"<% end %> />
+              <label for="roadmap_type_iterations"><%= l(:label_iteration_plural) %></label>
+            </td>
+          </tr>
+          </tbody>
+      </table>
+    </div>
+  </fieldset>
+  <%= link_to_function l(:button_apply), '$("roadmap_by_form").submit();', :class => 'icon icon-checked' %>
+<% end %>
+
+<div id="roadmap">
+  <% if !@versions.nil? %>
+    <%if @versions.empty? %>
+      <p class="nodata"><%= l(:label_no_data) %></p>
+    <% else %>
+      <%= render :partial => 'versions' %>
+    <% end %>
+  <% elsif !@milestones.nil? %>
+    <%if @milestones.empty? %>
+      <p class="nodata"><%= l(:label_no_data) %></p>
+    <% else %>
+      <%= render :partial => 'milestones' %>
+    <% end %>
+  <% else %>
+    <%if @iterations.empty? %>
+      <p class="nodata"><%= l(:label_no_data) %></p>
+    <% else %>
+      <%= render :partial => 'iterations' %>
+    <% end %>
+  <% end %>
+</div>
+
+<% content_for :sidebar do %>
+  <% form_tag({}, :method => :get) do %>
+    <%= hidden_field_tag "roadmap_type", @roadmap_type %>
+    <h3><%= l(:label_roadmap) %></h3>
+      <% @trackers.each do |tracker| %>
+        <label><%= check_box_tag "tracker_ids[]", tracker.id, (@selected_tracker_ids.include? tracker.id.to_s), :id => nil %>
+        <%=h tracker.name %></label><br />
+      <% end %>
+    <br />
+    <label for="completed"><%= check_box_tag "completed", 1, params[:completed] %> <%= l(:label_show_completed_versions) %></label>
+    <% if @project.descendants.active.any? %>
+      <%= hidden_field_tag 'with_subprojects', 0 %>
+      <br /><label><%= check_box_tag 'with_subprojects', 1, @with_subprojects %> <%=l(:label_subproject_plural)%></label>
+    <% end %>
+    <p><%= submit_tag l(:button_apply), :class => 'button-small', :name => nil %></p>
+  <% end %>
+
+  <% if !@versions.nil? %>
+    <h3><%= l(:label_version_plural) %></h3>
+    <% @versions.each do |version| %>
+      <%= link_to format_version_name(version), "##{version.name}" %><br />
+    <% end %>
+  <% elsif !@milestones.nil? %>
+    <h3><%= l(:label_milestone_plural) %></h3>
+    <% @milestones.each do |milestone| %>
+      <%= link_to milestone.name, "##{milestone.name}" %><br />
+    <% end %>
+  <% else %>
+    <h3><%= l(:label_iteration_plural) %></h3>
+    <% @iterations.each do |iteration| %>
+      <%= link_to iteration.name, "##{iteration.name}" %><br />
+    <% end %>
+  <% end %>
+
+<% end %>
+
+<% html_title(l(:label_roadmap)) %>
+
+<%= context_menu issues_context_menu_path %>

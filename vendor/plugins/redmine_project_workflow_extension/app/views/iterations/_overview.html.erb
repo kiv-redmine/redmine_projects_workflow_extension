@@ -1,0 +1,20 @@
+<% if iteration.completed? %>
+  <p><%= format_date(iteration.end_date) %></p>
+<% elsif iteration.end_date %>
+  <p><strong><%= due_date_distance_in_words(iteration.end_date) %></strong> (<%= format_date(iteration.end_date) %>)</p>
+<% end %>
+
+<p><%=h iteration.description %></p>
+
+<% if iteration.issues.count > 0 %>
+    <%= progress_bar([iteration.closed_pourcent, iteration.completed_pourcent], :width => '40em', :legend => ('%0.0f%' % iteration.completed_pourcent)) %>
+    <p class="progress-info">
+        <%= link_to_if(iteration.closed_issues_count > 0, l(:label_x_closed_issues_abbr, :count => iteration.closed_issues_count), :controller => 'issues', :action => 'index', :project_id => iteration.project, :status_id => 'c', :iteration_id => iteration, :set_filter => 1) %>
+        (<%= '%0.0f' % (iteration.closed_issues_count.to_f / iteration.issues.count * 100) %>%)
+        &#160;
+        <%= link_to_if(iteration.open_issues_count > 0, l(:label_x_open_issues_abbr, :count => iteration.open_issues_count), :controller => 'issues', :action => 'index', :project_id => iteration.project, :status_id => 'o', :iteration_id => iteration, :set_filter => 1) %>
+        (<%= '%0.0f' % (iteration.open_issues_count.to_f / iteration.issues.count * 100) %>%)
+    </p>
+<% else %>
+  <p><em><%= l(:label_roadmap_no_issues) %></em></p>
+<% end %>

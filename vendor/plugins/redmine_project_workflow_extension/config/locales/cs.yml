@@ -12,6 +12,8 @@ cs:
   label_milestone_new: "Nový milník"
   label_milestone_name: "Název"
 
+  label_roadmap_by: "Typ roadmapy"
+
   field_iteration: "Iterace"
   label_iteration: "Iterace"
   label_iteration_plural: "Iterace"

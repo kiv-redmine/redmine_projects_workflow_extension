@@ -1,4 +1,7 @@
-# Add milestone and iterations to query!
+# encoding: utf-8
+
+# Part of Redmine Project Workflow Extension - 1.3 plugin
+# author: strnadj <jan.strnadek@gmail.com>
 module RedmineProjectWorkflowExtension
   module Patches
     module QueryPatch
