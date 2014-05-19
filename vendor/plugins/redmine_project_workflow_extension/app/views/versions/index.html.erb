@@ -14,6 +14,18 @@
 
 <!-- FILTERS -->
 <% form_tag({:controller => 'versions', :action => 'index', :project_id => @project}, :method => :get, :id => 'roadmap_by_form') do %>
+  <!-- OLD SETTINGS from sidebar -->
+  <% @trackers.each do |tracker| %>
+    <% if @selected_tracker_ids.include? tracker.id.to_s %>
+      <%= hidden_field_tag 'tracker_ids[]', tracker.id %>
+    <% end %>
+  <% end %>
+  <% if params[:completed] == "1" %>
+    <%= hidden_field_tag "completed", 1 %>
+  <% end %>
+  <% if @with_subprojects %>
+    <%= hidden_field_tag "with_subprojects", 1 %>
+  <% end %>
   <fieldset id="show_by" class="collapsible">
     <legend onlick="toggleFieldset(this);"><%= l(:label_roadmap_by) %></legend>
     <div>

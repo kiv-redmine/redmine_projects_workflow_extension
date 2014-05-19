@@ -73,7 +73,7 @@ RAILS_ENV=production rake burndown:generate_all
 
 <img src="https://raw.github.com/Strnadj/redmine13_project_workflow_extension/master/readme_data/iterations.png" alt="Project settings iterations" />
 
-### Grouping by iteration
+### Grouping by iteration and milestones
 
 <img src="https://raw.github.com/Strnadj/redmine13_project_workflow_extension/master/readme_data/grouping.png" alt="Project iterations grouping" />
 
