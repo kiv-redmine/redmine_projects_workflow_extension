@@ -2,6 +2,46 @@
 
 <% content_for :sidebar do %>
   <%= render 'sidebar' %>
+
+  <% if @versions.any? %>
+    <h3><%= l(:label_show_versions) %></h3>
+    <ul>
+      <% @versions.each do |version| %>
+        <li>
+          <%= link_to_remote version.name, { :url => { :controller => :graph, :action => :show_plot_band, :project_id => @project, :type => 'version', :id => version.id } } %>
+        </li>
+      <% end %>
+      <li>
+        <%= link_to_remote l(:label_draw_all), { :url => {:controller => :graph, :action => :show_plot_band, :project_id => @project, :type => 'version', :id => 'all' } } %>
+      </li>
+    </ul>
+  <% end %>
+  <% if @milestones.any? %>
+    <h3><%= l(:label_show_milestones) %></h3>
+    <ul>
+      <% @milestones.each do |milestone| %>
+        <li>
+          <%= link_to_remote milestone.name, { :url => { :controller => :graph, :action => :show_plot_band, :project_id => @project, :type => 'milestone', :id => milestone.id } } %>
+        </li>
+      <% end %>
+      <li>
+        <%= link_to_remote l(:label_draw_all), { :url => {:controller => :graph, :action => :show_plot_band, :project_id => @project, :type => 'milestone', :id => 'all' } } %>
+      </li>
+    </ul>
+  <% end %>
+  <% if @iterations.any? %>
+    <h3><%= l(:label_show_iterations) %></h3>
+    <ul>
+      <% @iterations.each do |iteration| %>
+        <li>
+          <%= link_to_remote iteration.name, { :url => { :controller => :graph, :action => :show_plot_band, :project_id => @project, :type => 'iteration', :id => iteration.id } } %>
+        </li>
+      <% end %>
+      <li>
+        <%= link_to_remote l(:label_draw_all), { :url => {:controller => :graph, :action => :show_plot_band, :project_id => @project, :type => 'iteration', :id => 'all' } } %>
+      </li>
+    </ul>
+  <% end %>
 <% end %>
 
 <h2><%= l(:label_burndown_chart) %></h2>
@@ -24,35 +64,6 @@ document.observe('dom:loaded', function(){
             $tooltip.hide();
         }, 2500);
     };
-
-    function hideAll() {
-      <%= print_remove_plot_bands("chart", @milestones) %>
-      <%= print_remove_plot_bands("chart", @versions) %>
-      <%= print_remove_plot_bands("chart", @iterations) %>
-    }
-
-    /** Observe check boxes for displaying / hiding project versions */
-    $$(".chart_options input").each(function(e) {
-      $(e.id).observe('click', function(e) {
-        hideAll();
-        if (this.checked) {
-          /* Display milestones|versions|iterations */
-          switch (this.id) {
-            case "show_milestones":
-            <%= print_create_plot_bands("chart", @milestones) %>
-            break;
-
-            case "show_iterations":
-            <%= print_create_plot_bands("chart", @iterations) %>
-            break;
-
-            case "show_versions":
-            <%= print_create_plot_bands("chart", @versions) %>
-            break;
-          }
-        }
-      });
-    });
 
 /* Create char */
 chart = new Highcharts.Chart({
@@ -103,25 +114,6 @@ chart = new Highcharts.Chart({
 <div id="burndown_chart" class="box" style="position: relative;">
   <div id="tooltip" class="thetooltip">
       <p id="tooltiptext" style="margin:0">default</p>
-  </div>
-  <div class="chart_options" style="width: 100%; text-align: center;">
-    <strong><%= l(:label_show_project_attributes) %>:</strong>&nbsp;
-    <label>
-      <input type="radio" name="show" id="show_milestones" />
-      <%= l(:label_milestone_plural) %>
-    </label>
-    <label>
-      <input type="radio" name="show" id="show_versions" />
-      <%= l(:label_version_plural) %>
-    </label>
-    <label>
-      <input type="radio" name="show" id="show_iterations" />
-      <%= l(:label_iteration_plural) %>
-    </label>
-    <label>
-      <input type="radio" name="show" id="hide_all" checked="checked" />
-      <%= l(:label_hide_all_attributes) %>
-    </label>
   </div>
   <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto; z-index: 1;"></div>
 </div>

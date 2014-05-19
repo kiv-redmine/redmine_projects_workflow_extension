@@ -1,0 +1,10 @@
+chart.xAxis[0].removePlotBand('chartitem');
+
+<% @array.each do |item| %>
+  chart.xAxis[0].addPlotBand({
+    from: <%= item[:from] %>, to: <%= item[:to] %>, id: "chartitem",
+    color: "<%= item[:color] %>",
+    events: { mouseover: function (e) {
+      displayTooltip('<%= item[:label] %>', this.svgElem.d.split(' ')[1] + this.svgElem.d.split(' ')[0]); }, mouseout: hideTooltip }
+  });
+<% end %>

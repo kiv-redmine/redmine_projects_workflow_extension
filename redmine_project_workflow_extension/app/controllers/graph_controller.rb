@@ -5,38 +5,66 @@
 
 class GraphController < ApplicationController
   # Find project
-  before_filter :find_project_by_project_id
+  before_filter :find_project_for_graph
   before_filter :authorize
 
   # Helper method
   helper_method :date_to_json
 
+  # Show on Xaxis plot bands
+  def show_plot_band
+    if params[:type] == 'version'
+      if params[:id] == 'all'
+        @versions = @project.versions
+      else
+        @versions = Array.wrap(Version.find(params[:id]))
+      end
+
+      @array = @versions.map { |version| {
+        :from => date_to_json(version[:start_date]),
+        :to   => date_to_json(version.due_date),
+        :label => version.name,
+        :id    => version.id,
+        :color => "rgba(#{rand(255)}, #{rand(255)}, #{rand(255)}, .2)"
+      }}
+    elsif params[:type] == 'milestone'
+      if params[:id] == 'all'
+        @milestones = @project.milestones
+      else
+        @milestones = Array.wrap(Milestone.find_by_id_and_project_id(params[:id], @project.id))
+      end
+
+      @array = @milestones.map { |milestone| {
+        :from => date_to_json(milestone[:start_date]),
+        :to   => date_to_json(milestone[:end_date]),
+        :label => milestone.name,
+        :id    => milestone.id,
+        :color => "rgba(#{rand(255)}, #{rand(255)}, #{rand(255)}, .2)"
+      }}
+    else
+      if params[:id] == 'all'
+        @iterations = @project.iterations
+      else
+        @iterations = Array.wrap(Iteration.find_by_id_and_project_id(params[:id], @project.id))
+      end
+
+      @array = @iterations.map { |iteration| {
+        :from => date_to_json(iteration[:start_date]),
+        :to   => date_to_json(iteration[:end_date]),
+        :label => iteration.name,
+        :id    => iteration.id,
+        :color => "rgba(#{rand(255)}, #{rand(255)}, #{rand(255)}, .2)"
+      }}
+
+    end
+  end
+
   # Show graphs
   def burndown
-    # Get versions & iterations & milestones
-    @versions = @project.versions.map { |version| {
-      :from => date_to_json(version[:start_date]),
-      :to   => date_to_json(version.due_date),
-      :label => version.name,
-      :id    => "version_#{version.name.underscore}",
-      :color => "rgba(#{rand(255)}, #{rand(255)}, #{rand(255)}, .2)"
-    } }
-
-    @milestones = @project.milestones.map { |milestone| {
-      :from => date_to_json(milestone[:start_date]),
-      :to   => date_to_json(milestone[:end_date]),
-      :label => milestone.name,
-      :id    => "milestone_#{milestone.name.underscore}",
-      :color => "rgba(#{rand(255)}, #{rand(255)}, #{rand(255)}, .2)"
-    } }
-
-    @iterations = @project.iterations.map { |iteration| {
-      :from => date_to_json(iteration[:start_date]),
-      :to   => date_to_json(iteration[:end_date]),
-      :label => iteration.name,
-      :id    => "iteration_#{iteration.name.underscore}",
-      :color => "rgba(#{rand(255)}, #{rand(255)}, #{rand(255)}, .2)"
-    } }
+    # Load milestones versions and iterations
+    @milestones = @project.milestones
+    @versions   = @project.versions
+    @iterations = @project.iterations
 
     # Start date
     @start_date = @project.get_start_date
@@ -138,6 +166,13 @@ class GraphController < ApplicationController
   end
 
   private
+
+  # Find project of id params[:project_id]
+  def find_project_for_graph
+    @project = Project.find(params[:project_id], :include => [:versions, :milestones, :iterations])
+  rescue ActiveRecord::RecordNotFound
+    render_404
+  end
 
   def date_to_json(date)
     "Date.UTC(#{date.year}, #{date.month-1}, #{date.day})"

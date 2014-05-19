@@ -12,6 +12,12 @@ en:
   label_milestone_new: "New milestone"
   label_milestone_name: "Name"
 
+  label_show_milestones: "Show milestones"
+  label_draw_all: "All"
+  label_show_versions: "Show versions"
+  label_show_iterations: "Show iterations"
+
+  error_issue_estimated_hours_exceeded: "cannot exceed estimated time!"
   label_roadmap_by: "Roadmap type"
 
   label_charts_menu: "Charts"

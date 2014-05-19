@@ -12,7 +12,13 @@ cs:
   label_milestone_new: "Nový milník"
   label_milestone_name: "Název"
 
+  label_show_milestones: "Zobrazit milníky"
+  label_draw_all: "Všechny"
+  label_show_versions: "Zobrazit verze"
+  label_show_iterations: "Zobrazit iterace"
+
   label_roadmap_by: "Typ roadmapy"
+  error_issue_estimated_hours_exceeded: "nesmí přesahovat odhadovanou dobu!"
 
   field_iteration: "Iterace"
   label_iteration: "Iterace"
