@@ -89,7 +89,8 @@ chart = new Highcharts.Chart({
   yAxis: {
     title: {
       text: '<%= l(:label_chart_hours) %>'
-    }
+     },
+     min: 0
   },
   series: [
           { name: "<%= l(:label_chart_estimated_time) %>", data: [ <%= print_chart_line(@ideal_line) %> ] }
