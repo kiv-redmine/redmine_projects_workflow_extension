@@ -98,8 +98,20 @@ class GraphController < ApplicationController
     end
 
     if filter_by == 'all'
+      # Find project rec
+      init_rec = @project.burndown_records.find(:first, :conditions => [ "init_project = ?", true ])
+
+      # Create init rec
+      unless init_rec
+        BurndownRecord.update_project_start(@project)
+        init_rec = @project.burndown_records.find(:first, :conditions => [ "init_project = ?", true ])
+      end
+
+      # Project total hours
+      total_hours = init_rec.add_time
+
       # Find project ideal line always!
-      @ideal_line = count_ideal_line(@project)
+      @ideal_line = generate_line(total_hours, 0, @project.get_start_date, @project.get_end_date)
     else
       count_burndown_for_project(@project, @data_obj, @condition, @start_date, @end_date)
     end
@@ -147,7 +159,7 @@ class GraphController < ApplicationController
     end
 
     # Prepare ideal line
-    @ideal_line = count_grown_line(@total_hours, start_date, end_date)
+    @ideal_line = generate_line(0, @total_hours, start_date, end_date)
 
     # Right line
     @current_line = []
@@ -194,40 +206,42 @@ class GraphController < ApplicationController
                         ]).to_f.round(3)
 
       # Add to record
-      @current_line << rec
+      if rec.add_time > 0 || rec.sub_time > 0 || rec.day == start_date
+        @current_line << rec
+      end
     end
   end
 
-  # Up line from 0 to total Hours from start_date to end date
-  def count_grown_line(total_hours, start_date, end_date)
-    ideal_line = []
+  # Generate Line with Su-So
+  def generate_line(from, to, start_date, end_date)
+    # Line points
+    lines = []
 
     # Set start and end date to Working days!
     if start_date.cwday >= 6
       # Add official start date point
-      ideal_line << [ date_to_json(start_date), 0 ]
+      lines << [ date_to_json(start_date), from ]
 
       # Skip to working days
       start_date = start_date.advance(:days => (8 - start_date.cwday))
     end
 
-    # Set end date to working day!
+    # End day
     if end_date.cwday >= 6
       end_date = end_date.advance(:days => (8 - end_date.cwday))
     end
 
     # Total number of dates!
-    day_diff    = (end_date - start_date).to_i
+    day_diff = (end_date - start_date).to_i
 
-    # Equasion for line!
+    # Compute equasion
     # y = mx+b
     # m = (y2-y1) / (x2 - x1)
-    m = (total_hours - 0 * 1.0) / ( day_diff * 1.0)
+    m = (to * 1.0 - from) / (day_diff * 1.0)
 
-    # coefficients
+    # Coefficient Y
     # b = y1 - m*x1
-    # in this case is total hours => 0 -> b = 0 - m*0
-    b = 0 * 1.0
+    b = from * 1.0
 
     # So Y function is now...
     f = lambda { |x| m*x + b }
@@ -236,7 +250,7 @@ class GraphController < ApplicationController
     date = start_date
 
     # Add first date to project and start iteration
-    ideal_line << [ date_to_json(date), 0 ]
+    lines << [ date_to_json(date), from ]
 
     # Get Friday! - 5 - monday = 4 :)
     date = date.advance(:days => (5 - date.cwday))
@@ -248,108 +262,27 @@ class GraphController < ApplicationController
 
       # If monday is later than end date => 0
       if monday > end_date
-        hours = total_hours
+        hours = to
+        #Start date is friday!
+      elsif date == start_date
+        hours = from
       else
         hours = f.call((monday-start_date).to_i)
       end
 
       # Add to line week
-      ideal_line << [ date_to_json(date), hours.to_f.round(2) ]
-      ideal_line << [ date_to_json(monday), hours.to_f.round(2) ]
+      lines << [ date_to_json(date), hours.to_f.round(2) ]
+      lines << [ date_to_json(monday), hours.to_f.round(2) ]
 
       # Next week!
       date = date.advance(:weeks => 1)
     end
 
     # Add ideal line
-    ideal_line << [ date_to_json(end_date), total_hours ]
+    lines << [ date_to_json(end_date), to ]
 
     # Return
-    ideal_line
-  end
-
-  def count_ideal_line(project)
-    # Find project rec
-    init_rec = project.burndown_records.find(:first, :conditions => [ "init_project = ?", true ])
-
-    # Create init rec
-    unless init_rec
-      BurndownRecord.update_project_start(@project)
-      init_rec = project.burndown_records.find(:first, :conditions => [ "init_project = ?", true ])
-    end
-
-    # Project total hours
-    total_hours = init_rec.add_time
-    start_date  = project.get_start_date
-    end_date    = project.get_end_date
-
-    # Ideal line
-    ideal_line = []
-
-    # Set start and end date to Working days!
-    if start_date.cwday >= 6
-      # Add official start date point
-      ideal_line << [ date_to_json(start_date), total_hours ]
-
-      # Skip to working days
-      start_date = start_date.advance(:days => (8 - start_date.cwday))
-    end
-
-    # Set end date to working day!
-    if end_date.cwday >= 6
-      end_date = end_date.advance(:days => (8 - end_date.cwday))
-    end
-
-    # Total number of dates!
-    day_diff    = (end_date - start_date).to_i
-
-    # Equasion for line!
-    # y = mx+b
-    # m = (y2-y1) / (x2 - x1)
-    m = (- total_hours * 1.0) / ( day_diff * 1.0)
-
-    # coefficients
-    # b = y1 - m*x1
-    # in this case is total hours => 0,800 -> b = 800 - m*0
-    b = total_hours * 1.0
-
-    # So Y function is now...
-    f = lambda { |x| m*x + b }
-
-    # Date
-    date = start_date
-
-    # Add first date to project and start iteration
-    ideal_line << [ date_to_json(date), total_hours ]
-
-    # Get Friday! - 5 - monday = 4 :)
-    date = date.advance(:days => (5 - date.cwday))
-
-    # Start iteration
-    while (date < end_date) do
-      # Get monday!
-      monday = date.advance(:days => 3)
-
-      # If monday is later than end date => 0
-      if monday > end_date
-        hours = 0
-      else
-        hours = f.call((monday-start_date).to_i)
-      end
-
-      # Add to line week
-      ideal_line << [ date_to_json(date), hours.to_f.round(2) ]
-      ideal_line << [ date_to_json(monday), hours.to_f.round(2) ]
-
-      # Next week!
-      date = date.advance(:weeks => 1)
-    end
-
-    # Add ideal line
-    ideal_line << [ date_to_json(end_date), 0 ]
-
-    # Return ideal line
-    ideal_line
+    lines
   end
 
   # Find project of id params[:project_id]
@@ -359,6 +292,7 @@ class GraphController < ApplicationController
     render_404
   end
 
+  # Convert datetime to JSON
   def date_to_json(date)
     "Date.UTC(#{date.year}, #{date.month-1}, #{date.day})"
   end

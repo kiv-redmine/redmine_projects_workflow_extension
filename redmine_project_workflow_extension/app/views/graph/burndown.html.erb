@@ -125,7 +125,7 @@ chart = new Highcharts.Chart({
               <%= radio_button_tag 'filter_by', 'all', (params[:filter_by] == nil) || (params[:filter_by] == 'all') %>
             </td>
             <td style="width: 45px; padding-right: 10px; text-align: right;">
-              <label><%= l(:label_draw_all) %></label>
+              <label for="filter_by_all"><%= l(:label_draw_all) %></label>
             </td>
             <td>
               &nbsp;
@@ -136,10 +136,10 @@ chart = new Highcharts.Chart({
               <%= radio_button_tag 'filter_by', 'version', params[:filter_by] == 'version' %>
             </td>
             <td style="width: 45px; padding-right: 10px; text-align: right;">
-              <label><%= l(:label_version) %></label>
+              <label for="filter_by_version"><%= l(:label_version) %></label>
             </td>
             <td>
-              <%= select_tag 'filter_by_version_id', options_for_select(@versions.map { |i| [i.name, i.id] }, params[:filter_by_version_id]), :style => 'width: 150px' %>
+              <%= select_tag 'filter_by_version_id', options_for_select(@versions.map { |i| [i.name, i.id.to_s] }, params[:filter_by_version_id] ), :style => 'width: 150px' %>
             </td>
           </tr>
           <tr>
@@ -147,10 +147,10 @@ chart = new Highcharts.Chart({
               <%= radio_button_tag 'filter_by', 'milestone', params[:filter_by] == 'milestone' %>
             </td>
             <td style="width: 45px; padding-right: 10px; text-align: right;">
-              <label><%= l(:label_milestone) %></label>
+              <label for="filter_by_milestone"><%= l(:label_milestone) %></label>
             </td>
             <td>
-              <%= select_tag 'filter_by_milestone_id', options_for_select(@milestones.map { |i| [i.name, i.id] }, params[:filter_by_milestone_id]), :style => 'width: 150px' %>
+              <%= select_tag 'filter_by_milestone_id', options_for_select(@milestones.map { |i| [i.name, i.id.to_s] }, params[:filter_by_milestone_id]), :style => 'width: 150px' %>
             </td>
           </tr>
           <tr>
@@ -158,10 +158,10 @@ chart = new Highcharts.Chart({
               <%= radio_button_tag 'filter_by', 'iteration', params[:filter_by] == 'iteration' %>
             </td>
             <td style="width: 45px; padding-right: 10px; text-align: right;">
-              <label><%= l(:label_iteration) %></label>
+              <label for="filter_by_iteration"><%= l(:label_iteration) %></label>
             </td>
             <td>
-              <%= select_tag 'filter_by_iteration_id', options_for_select(@iterations.map { |i| [i.name, i.id] }, params[:filter_by_iteration_id]), :style => 'width: 150px' %>
+              <%= select_tag 'filter_by_iteration_id', options_for_select(@iterations.map { |i| [i.name, i.id.to_s] }, params[:filter_by_iteration_id]), :style => 'width: 150px' %>
             </td>
           </tr>
         </tbody>
