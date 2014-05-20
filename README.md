@@ -19,13 +19,6 @@
 * Rights settings for view charts, edit iterations or milestones
 * Advanced roadmap - iterations/milestones/versions
 
-## Features left
-
-* Chart filter
-* Ajax chart loading
-* Code cleaning
-* Update readme
-
 ## Reconstruction burndown data
 
 There is two rake tasks for regenerate old data from project for
@@ -49,7 +42,7 @@ RAILS_ENV=production rake burndown:generate_all
 
 <img src="https://raw.github.com/Strnadj/redmine13_project_workflow_extension/master/readme_data/overview.png" alt="Project overview"  style="box-shadow: 5px 5px rgba(0, 0, 0, .5);" />
 
-### Burndown chart
+### Burndown &amp; Burnup charts
 <img src="https://raw.github.com/Strnadj/redmine13_project_workflow_extension/master/readme_data/burndown.png" alt="Burndown chart"  style="box-shadow: 5px 5px rgba(0, 0, 0, .5);" />
 
 ### Issue status
