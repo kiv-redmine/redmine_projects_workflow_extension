@@ -17,6 +17,8 @@ en:
   label_chart_hours: "Hours"
   label_chart_dates: "Dates"
 
+  label_roadmap_show_completed: "Show completed"
+
   label_show_milestones: "Show milestones"
   label_draw_all: "All"
   label_show_versions: "Show versions"

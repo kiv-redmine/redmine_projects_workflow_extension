@@ -18,6 +18,8 @@ cs:
   label_chart_hours: "Hodiny"
   label_chart_dates: "Datumy"
 
+  label_roadmap_show_completed: "Zobraz všechny splněné"
+
   label_show_milestones: "Zobrazit milníky"
   label_draw_all: "Všechny"
   label_show_versions: "Zobrazit verze"
