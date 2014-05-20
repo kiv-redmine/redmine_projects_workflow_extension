@@ -12,8 +12,11 @@ cs:
   label_milestone_new: "Nový milník"
   label_milestone_name: "Název"
 
+  # Charts descriptions
   label_chart_estimated_time: "Odhadovaná doba"
   label_chart_total_time: "Skutečná doba"
+  label_chart_hours: "Hodiny"
+  label_chart_dates: "Datumy"
 
   label_show_milestones: "Zobrazit milníky"
   label_draw_all: "Všechny"

@@ -81,36 +81,98 @@ chart = new Highcharts.Chart({
   },
   xAxis: {
     title: {
-      text: 'Datumy'
+      text: '<%= l(:label_chart_dates) %>'
     },
     tickPixelInterval: 100,
     type: 'datetime'
   },
   yAxis: {
     title: {
-        text: 'Hodiny'
+      text: '<%= l(:label_chart_hours) %>'
     }
   },
   series: [
-          { name: "<%= l(:label_chart_estimated_time) %>", data: [ <%= print_chart_line(@ideal_line) %> ] },
-          { name: "<%= l(:label_chart_total_time) %>", data: [ <%= print_records(@current_line) %> ]}
+          { name: "<%= l(:label_chart_estimated_time) %>", data: [ <%= print_chart_line(@ideal_line) %> ] }
+          <% if @current_line %>
+              ,{ name: "<%= l(:label_chart_total_time) %>", data: [ <%= print_records(@current_line) %> ]}
+          <% end %>
         ]
   });
 });
 </script>
-  <style type="text/css">
-    .thetooltip {
-        border: 1px solid #2f7ed8;
-        background-color: #fff;
-        opacity: 0.8500000000000001;
-        padding: 4px 12px;
-        border-radius: 3px;
-        position: absolute;
-        top:100px;
-        box-shadow: 1px 1px 3px #666;
-        z-index: 1000;
-    }
-  </style>
+<style type="text/css">
+  .thetooltip {
+      border: 1px solid #2f7ed8;
+      background-color: #fff;
+      opacity: 0.8500000000000001;
+      padding: 4px 12px;
+      border-radius: 3px;
+      position: absolute;
+      top:100px;
+      box-shadow: 1px 1px 3px #666;
+      z-index: 1000;
+  }
+</style>
+
+<% form_tag({ :controller => :graph, :action => :burndown, :project_id => @project }, :method => :get, :id => 'graph_form') do %>
+  <fieldset id="filters" class="collapsible">
+    <legend onclick="toggleFieldset(this);"><%= l(:label_filter_plural) %></legend>
+    <div>
+      <table style="width: 50%;">
+        <tbody>
+          <tr>
+            <td style="width: 25px;">
+              <%= radio_button_tag 'filter_by', 'all', (params[:filter_by] == nil) || (params[:filter_by] == 'all') %>
+            </td>
+            <td style="width: 45px; padding-right: 10px; text-align: right;">
+              <label><%= l(:label_draw_all) %></label>
+            </td>
+            <td>
+              &nbsp;
+            </td>
+          </tr>
+          <tr>
+            <td style="width: 25px;">
+              <%= radio_button_tag 'filter_by', 'version', params[:filter_by] == 'version' %>
+            </td>
+            <td style="width: 45px; padding-right: 10px; text-align: right;">
+              <label><%= l(:label_version) %></label>
+            </td>
+            <td>
+              <%= select_tag 'filter_by_version_id', options_for_select(@versions.map { |i| [i.name, i.id] }, params[:filter_by_version_id]), :style => 'width: 150px' %>
+            </td>
+          </tr>
+          <tr>
+            <td style="width: 25px;">
+              <%= radio_button_tag 'filter_by', 'milestone', params[:filter_by] == 'milestone' %>
+            </td>
+            <td style="width: 45px; padding-right: 10px; text-align: right;">
+              <label><%= l(:label_milestone) %></label>
+            </td>
+            <td>
+              <%= select_tag 'filter_by_milestone_id', options_for_select(@milestones.map { |i| [i.name, i.id] }, params[:filter_by_milestone_id]), :style => 'width: 150px' %>
+            </td>
+          </tr>
+          <tr>
+            <td style="width: 25px;">
+              <%= radio_button_tag 'filter_by', 'iteration', params[:filter_by] == 'iteration' %>
+            </td>
+            <td style="width: 45px; padding-right: 10px; text-align: right;">
+              <label><%= l(:label_iteration) %></label>
+            </td>
+            <td>
+              <%= select_tag 'filter_by_iteration_id', options_for_select(@iterations.map { |i| [i.name, i.id] }, params[:filter_by_iteration_id]), :style => 'width: 150px' %>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </fieldset>
+    <%= link_to_function l(:button_apply), '$("graph_form").submit(); return false;', :class => 'icon icon-checked' %>
+<% end %>
+<br />
+<br />
+
 <div id="burndown_chart" class="box" style="position: relative;">
   <div id="tooltip" class="thetooltip">
       <p id="tooltiptext" style="margin:0">default</p>

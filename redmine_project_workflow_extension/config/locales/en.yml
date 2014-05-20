@@ -14,6 +14,8 @@ en:
 
   label_chart_estimated_time: "Estimated time"
   label_chart_total_time: "Real time"
+  label_chart_hours: "Hours"
+  label_chart_dates: "Dates"
 
   label_show_milestones: "Show milestones"
   label_draw_all: "All"

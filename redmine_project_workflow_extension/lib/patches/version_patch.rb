@@ -25,6 +25,11 @@ module RedmineProjectWorkflowExtension
           end
         end
 
+        # Issues
+        def issues
+          fixed_issues
+        end
+
         # Weird behaviour
         def start_date
           self[:start_date]
