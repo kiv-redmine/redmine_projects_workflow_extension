@@ -8,11 +8,11 @@
     <ul>
       <% @versions.each do |version| %>
         <li>
-          <%= link_to version.name, { :url => { :controller => :graph, :action => :show_plot_band, :project_id => @project, :type => 'version', :id => version.id } }, :remote => true %>
+          <%= link_to version.name,  { :controller => :graph, :action => :show_plot_band, :project_id => @project, :type => 'version', :id => version.id } , :remote => true %>
         </li>
       <% end %>
       <li>
-        <%= link_to l(:label_draw_all), { :url => {:controller => :graph, :action => :show_plot_band, :project_id => @project, :type => 'version', :id => 'all' } }, :remote => true %>
+        <%= link_to l(:label_draw_all),  {:controller => :graph, :action => :show_plot_band, :project_id => @project, :type => 'version', :id => 'all' } , :remote => true %>
       </li>
     </ul>
   <% end %>
@@ -21,11 +21,11 @@
     <ul>
       <% @milestones.each do |milestone| %>
         <li>
-          <%= link_to milestone.name, { :url => { :controller => :graph, :action => :show_plot_band, :project_id => @project, :type => 'milestone', :id => milestone.id } }, :remote => true %>
+          <%= link_to milestone.name,  { :controller => :graph, :action => :show_plot_band, :project_id => @project, :type => 'milestone', :id => milestone.id }, :remote => true %>
         </li>
       <% end %>
       <li>
-        <%= link_to l(:label_draw_all), { :url => {:controller => :graph, :action => :show_plot_band, :project_id => @project, :type => 'milestone', :id => 'all' } }, :remote => true %>
+        <%= link_to l(:label_draw_all),  {:controller => :graph, :action => :show_plot_band, :project_id => @project, :type => 'milestone', :id => 'all' }, :remote => true %>
       </li>
     </ul>
   <% end %>
@@ -34,11 +34,11 @@
     <ul>
       <% @iterations.each do |iteration| %>
         <li>
-          <%= link_to iteration.name, { :url => { :controller => :graph, :action => :show_plot_band, :project_id => @project, :type => 'iteration', :id => iteration.id } }, :remote => true %>
+          <%= link_to iteration.name,  { :controller => :graph, :action => :show_plot_band, :project_id => @project, :type => 'iteration', :id => iteration.id }, :remote => true %>
         </li>
       <% end %>
       <li>
-      <%= link_to l(:label_draw_all), { :url => {:controller => :graph, :action => :show_plot_band, :project_id => @project, :type => 'iteration', :id => 'all' } }, :remote => true %>
+      <%= link_to l(:label_draw_all), {:controller => :graph, :action => :show_plot_band, :project_id => @project, :type => 'iteration', :id => 'all' }, :remote => true %>
       </li>
     </ul>
   <% end %>
@@ -49,13 +49,13 @@
 <script type="text/javascript">
 var chart;
 $(function(){
-    var $tooltip = $('tooltip');
+    var $tooltip = $('#tooltip');
     $tooltip.hide();
-    var $text = $('tooltiptext');
+    var $text = $('#tooltiptext');
     displayTooltip = function (text, left) {
-        $text.innerText = text;
+        $text.html(text);
         $tooltip.show();
-        $tooltip.attributes['style'].value = 'left: ' + parseInt(left)  + 'px';
+        $tooltip.attr['style'] = 'left: ' + parseInt(left)  + 'px';
     };
     var timer;
     hideTooltip = function (e) {
@@ -114,7 +114,7 @@ chart = new Highcharts.Chart({
   }
 </style>
 
-<% form_tag({ :controller => :graph, :action => :burndown, :project_id => @project }, :method => :get, :id => 'graph_form') do %>
+<%= form_tag({ :controller => :graph, :action => :burndown, :project_id => @project }, :method => :get, :id => 'graph_form') do %>
   <fieldset id="filters" class="collapsible">
     <legend onclick="toggleFieldset(this);"><%= l(:label_filter_plural) %></legend>
     <div>
@@ -168,7 +168,7 @@ chart = new Highcharts.Chart({
       </table>
     </div>
   </fieldset>
-    <%= link_to_function l(:button_apply), '$("graph_form").submit(); return false;', :class => 'icon icon-checked' %>
+    <%= link_to_function l(:button_apply), '$("#graph_form").submit(); return false;', :class => 'icon icon-checked' %>
 <% end %>
 <br />
 <br />

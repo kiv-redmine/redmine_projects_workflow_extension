@@ -13,7 +13,7 @@
 <h2><%=l(:label_roadmap)%></h2>
 
 <!-- FILTERS -->
-<% form_tag({:controller => 'versions', :action => 'index', :project_id => @project}, :method => :get, :id => 'roadmap_by_form') do %>
+<%= form_tag({:controller => 'versions', :action => 'index', :project_id => @project}, :method => :get, :id => 'roadmap_by_form') do %>
   <!-- OLD SETTINGS from sidebar -->
   <% @trackers.each do |tracker| %>
     <% if @selected_tracker_ids.include? tracker.id.to_s %>
@@ -49,7 +49,7 @@
       </table>
     </div>
   </fieldset>
-  <%= link_to_function l(:button_apply), '$("roadmap_by_form").submit();', :class => 'icon icon-checked' %>
+  <%= link_to_function l(:button_apply), '$("#roadmap_by_form").submit();', :class => 'icon icon-checked' %>
 <% end %>
 
 <div id="roadmap">
@@ -75,7 +75,7 @@
 </div>
 
 <% content_for :sidebar do %>
-  <% form_tag({}, :method => :get) do %>
+  <%= form_tag({}, :method => :get) do %>
     <%= hidden_field_tag "roadmap_type", @roadmap_type %>
     <h3><%= l(:label_roadmap) %></h3>
       <% @trackers.each do |tracker| %>

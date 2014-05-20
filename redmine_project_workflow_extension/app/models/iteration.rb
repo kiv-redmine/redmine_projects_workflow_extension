@@ -32,17 +32,20 @@ class Iteration < ActiveRecord::Base
 
   # Returns the total amount of open issues for this milestone.
   def open_issues_count
-    @open_issues_count ||= Issue.count(:all, :conditions => ["iteration_id = ? AND is_closed = ?", self.id, false], :include => :status)
+    load_issue_counts
+    @open_issues_count
   end
 
   def closed_issues_count
-    @closed_issues_count ||= Issue.count(:all, :conditions => ["iteration_id = ? AND is_closed = ?", self.id, true], :include => :status)
+    load_issue_counts
+    @closed_issues_count
   end
 
-  # Returns assigned issues count
   def issues_count
-    @issue_count ||= issues.count
+    load_issue_counts
+    @issue_count
   end
+
   def completed_pourcent
     if issues_count == 0
       0
@@ -73,10 +76,7 @@ class Iteration < ActiveRecord::Base
       progress = 0
       if issues_count > 0
         ratio = open ? 'done_ratio' : 100
-
-        done = issues.sum("COALESCE(estimated_hours, #{estimated_average}) * #{ratio}",
-                                  :include => :status,
-                                  :conditions => ["is_closed = ?", !open]).to_f
+        done = issues.open(open).sum("COALESCE(estimated_hours, #{estimated_average}) * #{ratio}").to_f
         progress = done / (estimated_average * issues_count)
       end
       progress
@@ -99,6 +99,20 @@ class Iteration < ActiveRecord::Base
 
 
   private
+    def load_issue_counts
+      unless @issue_count
+        @open_issues_count = 0
+        @closed_issues_count = 0
+        issues.count(:all, :group => :status).each do |status, count|
+          if status.is_closed?
+            @closed_issues_count += count
+          else
+            @open_issues_count += count
+          end
+        end
+        @issue_count = @open_issues_count + @closed_issues_count
+      end
+    end
 
     def date_validation
       errors.add(:start_date, I18n.t("activerecord.errors.messages.not_a_date")) unless self[:start_date]

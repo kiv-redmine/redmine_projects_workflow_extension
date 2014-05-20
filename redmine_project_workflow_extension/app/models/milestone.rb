@@ -33,16 +33,18 @@ class Milestone < ActiveRecord::Base
 
   # Returns the total amount of open issues for this milestone.
   def open_issues_count
-    @open_issues_count ||= Issue.count(:all, :conditions => ["milestone_id = ? AND is_closed = ?", self.id, false], :include => :status)
+    load_issue_counts
+    @open_issues_count
   end
 
   def closed_issues_count
-    @closed_issues_count ||= Issue.count(:all, :conditions => ["milestone_id = ? AND is_closed = ?", self.id, true], :include => :status)
+    load_issue_counts
+    @closed_issues_count
   end
 
-  # Returns assigned issues count
   def issues_count
-    @issue_count ||= issues.count
+    load_issue_counts
+    @issue_count
   end
 
   def completed_pourcent
@@ -62,6 +64,7 @@ class Milestone < ActiveRecord::Base
       issues_progress(false)
     end
   end
+
   # Returns the total progress of open or closed issues.  The returned percentage takes into account
   # the amount of estimated time set for this version.
   #
@@ -74,10 +77,7 @@ class Milestone < ActiveRecord::Base
       progress = 0
       if issues_count > 0
         ratio = open ? 'done_ratio' : 100
-
-        done = issues.sum("COALESCE(estimated_hours, #{estimated_average}) * #{ratio}",
-                                  :include => :status,
-                                  :conditions => ["is_closed = ?", !open]).to_f
+        done = issues.open(open).sum("COALESCE(estimated_hours, #{estimated_average}) * #{ratio}").to_f
         progress = done / (estimated_average * issues_count)
       end
       progress
@@ -105,6 +105,21 @@ class Milestone < ActiveRecord::Base
 
       if self[:start_date] && self[:end_date] && self[:start_date] > self[:end_date]
         errors.add(nil, I18n.t(:error_date_overleap))
+      end
+    end
+
+    def load_issue_counts
+      unless @issue_count
+        @open_issues_count = 0
+        @closed_issues_count = 0
+        issues.count(:all, :group => :status).each do |status, count|
+          if status.is_closed?
+            @closed_issues_count += count
+          else
+            @open_issues_count += count
+          end
+        end
+        @issue_count = @open_issues_count + @closed_issues_count
       end
     end
 end

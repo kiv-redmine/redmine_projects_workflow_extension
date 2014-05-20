@@ -12,6 +12,9 @@ cs:
   label_milestone_new: "Nový milník"
   label_milestone_name: "Název"
 
+  # Roadmap
+  label_roadmap_show_completed: "Zobraz všechny splněné"
+
   # Charts descriptions
   label_chart_estimated_time: "Odhadovaná doba"
   label_chart_total_time: "Skutečná doba"

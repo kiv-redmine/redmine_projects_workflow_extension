@@ -206,7 +206,7 @@ class GraphController < ApplicationController
                         ]).to_f.round(3)
 
       # Add to record
-      if rec.add_time > 0 || rec.sub_time > 0 || rec.day == start_date
+      if rec.add_time > 0 || rec.sub_time > 0
         @current_line << rec
       end
     end

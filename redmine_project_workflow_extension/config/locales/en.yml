@@ -12,6 +12,8 @@ en:
   label_milestone_new: "New milestone"
   label_milestone_name: "Name"
 
+  label_roadmap_show_completed: "Show completed"
+
   label_chart_estimated_time: "Estimated time"
   label_chart_total_time: "Real time"
   label_chart_hours: "Hours"
