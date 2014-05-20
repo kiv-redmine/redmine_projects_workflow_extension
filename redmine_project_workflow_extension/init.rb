@@ -3,9 +3,8 @@
 # Part of Redmine Project Workflow Extension - 1.3 plugin
 # author: strnadj <jan.strnadek@gmail.com>
 require 'redmine'
-require 'dispatcher'
 
-ActionController::Dispatcher.to_prepare :redmine_project_workflow_extension do
+ActionDispatch::Reloader.to_prepare do
   require_dependency 'version'
   require_dependency 'project'
   require_dependency 'projects_helper'
@@ -66,7 +65,7 @@ Redmine::Plugin.register :redmine_project_workflow_extension do
   version '0.0.1'
   url 'https://github.com/Strnadj/redmine13_project_workflow_extension'
   author_url 'mailto:jan.strnadek@gmail.com'
-  requires_redmine :version_or_higher => '1.3'
+  requires_redmine :version_or_higher => '2.0'
 
   # Menu view Graphs in project menu
   menu :project_menu, :charts, { :controller => :graph, :action => :burndown }, :caption => :label_charts_menu, :after => :new_issue, :param => :project_id

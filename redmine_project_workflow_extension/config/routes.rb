@@ -1,9 +1,8 @@
-ActionController::Routing::Routes.draw do |map|
-  map.resources :projects do |project|
-    project.resources :milestones
-    project.resources :iterations
-  end
-
-  # Graph routes
-  map.connect 'projects/:project_id/graphs/:action', :controller => :graph
+# Milestone and iterations routes
+resources :projects do
+  resources :milestones
+  resources :iterations
 end
+
+# Graph routes
+match 'projects/:project_id/graphs/:action', :controller => :graph

@@ -24,7 +24,7 @@
   <% unless @project.homepage.blank? %>
     <div class="home_link box">
       <h3><%=l(:field_homepage)%></h3>
-      <ul><li> <%= auto_link(h(@project.homepage)) %></li></ul>
+      <ul><li> <%= link_to h(@project.homepage), @project.homepage %></li></ul>
     </div>
   <% end %>
 
@@ -87,7 +87,7 @@
     <h3><%= l(:label_spent_time) %></h3>
     <p><span class="icon icon-time"><%= l_hours(@total_hours) %></span></p>
     <p><%= link_to(l(:label_details), {:controller => 'timelog', :action => 'index', :project_id => @project}) %> |
-    <%= link_to(l(:label_report), {:controller => 'time_entry_reports', :action => 'report', :project_id => @project}) %></p>
+    <%= link_to(l(:label_report), report_project_time_entries_path(@project)) %>
     <% end %>
     <%= call_hook(:view_projects_show_sidebar_bottom, :project => @project) %>
 <% end %>

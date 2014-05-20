@@ -7,7 +7,6 @@ module RedmineProjectWorkflowExtension
 
         # Include highcharts for graph controller
         if context[:controller] && context[:controller].is_a?(GraphController)
-          head_content << javascript_include_tag('highcharts-prototype', :plugin => 'redmine_project_workflow_extension')
           head_content << javascript_include_tag('highcharts', :plugin => 'redmine_project_workflow_extension')
         end
 
