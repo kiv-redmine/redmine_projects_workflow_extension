@@ -42,8 +42,11 @@ RAILS_ENV=production rake burndown:generate_all
 
 <img src="https://raw.github.com/Strnadj/redmine13_project_workflow_extension/master/readme_data/overview.png" alt="Project overview"  style="box-shadow: 5px 5px rgba(0, 0, 0, .5);" />
 
-### Burndown &amp; Burnup charts
+### Burndown chart
 <img src="https://raw.github.com/Strnadj/redmine13_project_workflow_extension/master/readme_data/burndown.png" alt="Burndown chart"  style="box-shadow: 5px 5px rgba(0, 0, 0, .5);" />
+
+### Burnup chart
+<img src="https://raw.github.com/Strnadj/redmine13_project_workflow_extension/master/readme_data/burnup.png" alt="Burnup chart"  style="box-shadow: 5px 5px rgba(0, 0, 0, .5);" />
 
 ### Issue status
 <img src="https://raw.github.com/Strnadj/redmine13_project_workflow_extension/master/readme_data/issue_status.png" alt="Issue status"  style="box-shadow: 5px 5px rgba(0, 0, 0, .5);" />

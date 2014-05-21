@@ -44,7 +44,7 @@
   <% end %>
 <% end %>
 
-<h2><%= l(:label_burndown_chart) %></h2>
+<h2><%= l(:label_burnup_chart) %></h2>
 
 <script type="text/javascript">
 var chart;
@@ -95,7 +95,7 @@ chart = new Highcharts.Chart({
   series: [
           { name: "<%= l(:label_chart_estimated_time) %>", data: [ <%= print_chart_line(@ideal_line) %> ] }
           <% if @current_line %>
-              ,{ name: "<%= l(:label_chart_total_time) %>", data: [ <%= print_burn_down(@current_line) %> ]}
+              ,{ name: "<%= l(:label_chart_total_time) %>", data: [ <%= print_burn_up(@current_line) %> ]}
           <% end %>
         ]
   });
@@ -115,7 +115,7 @@ chart = new Highcharts.Chart({
   }
 </style>
 
-<% form_tag({ :controller => :graph, :action => :burndown, :project_id => @project }, :method => :get, :id => 'graph_form') do %>
+<% form_tag({ :controller => :graph, :action => :burnup, :project_id => @project }, :method => :get, :id => 'graph_form') do %>
   <fieldset id="filters" class="collapsible">
     <legend onclick="toggleFieldset(this);"><%= l(:label_filter_plural) %></legend>
     <div>

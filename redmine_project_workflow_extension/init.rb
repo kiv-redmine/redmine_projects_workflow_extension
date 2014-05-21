@@ -75,7 +75,7 @@ Redmine::Plugin.register :redmine_project_workflow_extension do
   project_module :workflow_module do
     # Permission for view graphs
     permission :view_graphs, {
-      :graph => [:burndown, :issue_status, :show_plot_band]
+      :graph => [:burndown, :issue_status, :show_plot_band, :burnup]
     }, :require => :loggedin
 
     # Manage milestones permission

@@ -36,6 +36,7 @@ cs:
 
   label_charts_menu: "Grafy"
   label_burndown_chart: "Burndown graf"
+  label_burnup_chart: "Burnup graf"
   label_issue_status_chart: "Stav úkolů"
 
   error_date_overleap: "Začátek musí být dříve než konec!"

@@ -29,6 +29,7 @@ en:
 
   label_charts_menu: "Charts"
   label_burndown_chart: "Burndown chart"
+  label_burnup_chart: "Burnup chart"
   label_issue_status_chart: "Issues status"
 
   field_iteration: "Iteration"

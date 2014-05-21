@@ -45,8 +45,9 @@ namespace :burndown do
     # Iterate by days!
     # 1) Changing estimated times
     # 2) TimeEntry
+    BurndownRecord.update_project_start(project, true)
     (project.get_start_date...project.get_end_date).each do |day|
-      BurndownRecord.update_by_project_and_day(project, day, true)
+      BurndownRecord.update_project_day_time(project, day, true)
     end
   end
 end
