@@ -3,3 +3,43 @@
 <%= link_to l(:label_burndown_chart), { :controller => :graph, :action => :burndown } %><br />
 <%= link_to l(:label_burnup_chart), { :controller => :graph, :action => :burnup } %><br />
 <%= link_to l(:label_issue_status_chart), { :controller => :graph, :action => :issue_status } %><br />
+
+<% if @versions && @versions.any? %>
+  <h3><%= l(:label_show_versions) %></h3>
+  <ul>
+    <% @versions.each do |version| %>
+      <li>
+        <%= link_to version.name,  { :controller => :graph, :action => :show_plot_band, :project_id => @project, :type => 'version', :id => version.id } , :remote => true %>
+      </li>
+    <% end %>
+    <li>
+      <%= link_to l(:label_draw_all),  {:controller => :graph, :action => :show_plot_band, :project_id => @project, :type => 'version', :id => 'all' } , :remote => true %>
+    </li>
+  </ul>
+<% end %>
+<% if @milestones && @milestones.any? %>
+  <h3><%= l(:label_show_milestones) %></h3>
+  <ul>
+    <% @milestones.each do |milestone| %>
+      <li>
+        <%= link_to milestone.name,  { :controller => :graph, :action => :show_plot_band, :project_id => @project, :type => 'milestone', :id => milestone.id }, :remote => true %>
+      </li>
+    <% end %>
+    <li>
+      <%= link_to l(:label_draw_all),  {:controller => :graph, :action => :show_plot_band, :project_id => @project, :type => 'milestone', :id => 'all' }, :remote => true %>
+    </li>
+  </ul>
+<% end %>
+<% if @iterations && @iterations.any? %>
+  <h3><%= l(:label_show_iterations) %></h3>
+  <ul>
+    <% @iterations.each do |iteration| %>
+      <li>
+        <%= link_to iteration.name,  { :controller => :graph, :action => :show_plot_band, :project_id => @project, :type => 'iteration', :id => iteration.id }, :remote => true %>
+      </li>
+    <% end %>
+    <li>
+    <%= link_to l(:label_draw_all), {:controller => :graph, :action => :show_plot_band, :project_id => @project, :type => 'iteration', :id => 'all' }, :remote => true %>
+    </li>
+  </ul>
+<% end %>
