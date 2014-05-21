@@ -11,6 +11,9 @@ class GraphController < ApplicationController
   # Helper method
   helper_method :date_to_json
 
+  # Fill version and authorization
+  before_filter :apply_filters, :only => [ :burndown, :burnup ]
+
   # Show on Xaxis plot bands
   def show_plot_band
     if params[:type] == 'version'
@@ -59,61 +62,65 @@ class GraphController < ApplicationController
     end
   end
 
-  # Show graphs
-  def burndown
-    # Load milestones versions and iterations
-    @milestones = @project.milestones
-    @versions   = @project.versions
-    @iterations = @project.iterations
+  # Show BurnUP
+  def burnup
+    # Project filter
+    if @filter_by == 'all'
+      # Project total hours
+      total_hours = @project.total_estimated_time
 
-    # Find by parameters
-    filter_by = params[:filter_by] || 'all'
-    if filter_by == 'version'
-      # Version
-      version = Version.find_by_id_and_project_id(params[:filter_by_version_id], @project.id)
-      @start_date = version[:start_date]
-      @end_date   = version.due_date
-      @data_obj   = version
-      @condition   = 'fixed_version_id'
-    elsif filter_by == 'milestone'
-      # Milestone
-      milestone = Milestone.find_by_id_and_project_id(params[:filter_by_milestone_id], @project.id)
-      @start_date = milestone[:start_date]
-      @end_date   = milestone[:end_date]
-      @data_obj   = milestone
-      @condition   = 'milestone_id'
-    elsif filter_by == 'iteration'
-      # Iteration
-      iteration = Iteration.find_by_id_and_project_id(params[:filter_by_iteration_id], @project.id)
-      @start_date = iteration[:start_date]
-      @end_date   = iteration[:end_date]
-      @data_obj   = iteration
-      @condition   = 'iteration_id'
-    else
-      # Project
-      @start_date = @project.get_start_date
-
-      # Current line
+      # Current line  burndown records)
       @current_line = @project.burndown_records
-    end
 
-    if filter_by == 'all'
-      # Find project rec
-      init_rec = @project.burndown_records.find(:first, :conditions => [ "init_project = ?", true ])
+      # We have to add total hours to first record or create it!
+      first_rec = @current_line.first
 
-      # Create init rec
-      unless init_rec
-        BurndownRecord.update_project_start(@project)
-        init_rec = @project.burndown_records.find(:first, :conditions => [ "init_project = ?", true ])
+      # First not exists or date is greather than start date?
+      if first_rec == nil || first_rec.day.to_date != @project.get_start_date
+        # Create new
+        rec = BurndownRecord.new(:day => @project.get_start_date, :sub_time => 0, :add_time => 0)
+
+        # Add on first place of current line
+        @current_line.insert(0, rec)
       end
 
+      # Find project ideal line always!
+      @ideal_line = generate_line(0, total_hours, @project.get_start_date, @project.get_end_date)
+    else
+      count_chart_for_project(@project, @data_obj, @condition, @start_date, @end_date)
+    end
+  rescue ActiveRecord::RecordNotFound
+    render_404
+  end
+
+  # Show graphs
+  def burndown
+    # Project filter
+    if @filter_by == 'all'
       # Project total hours
-      total_hours = init_rec.add_time
+      total_hours = @project.total_estimated_time
+
+      # Current line  burndown records)
+      @current_line = @project.burndown_records
+
+      # We have to add total hours to first record or create it!
+      first_rec = @current_line.first
+
+      # First not exists or date is greather than start date?
+      if first_rec == nil || first_rec.day.to_date != @project.get_start_date
+        # Create new
+        rec = BurndownRecord.new(:day => @project.get_start_date, :sub_time => 0, :add_time => total_hours)
+
+        # Add on first place of current line
+        @current_line.insert(0, rec)
+      else
+        first_rec.add_time = first_rec.add_time + total_hours
+      end
 
       # Find project ideal line always!
       @ideal_line = generate_line(total_hours, 0, @project.get_start_date, @project.get_end_date)
     else
-      count_burndown_for_project(@project, @data_obj, @condition, @start_date, @end_date)
+      count_chart_for_project(@project, @data_obj, @condition, @start_date, @end_date, true)
     end
   rescue ActiveRecord::RecordNotFound
     render_404
@@ -134,7 +141,42 @@ class GraphController < ApplicationController
 
   private
 
-  def count_burndown_for_project(project, data_obj, condition, start_date, end_date)
+  def apply_filters
+    # Load milestones versions and iterations
+    @milestones = @project.milestones
+    @versions   = @project.versions
+    @iterations = @project.iterations
+
+    # Find by parameters
+    @filter_by = params[:filter_by] || 'all'
+    if @filter_by == 'version'
+      # Version
+      version = Version.find_by_id_and_project_id(params[:filter_by_version_id], @project.id)
+      @start_date = version[:start_date]
+      @end_date   = version.due_date
+      @data_obj   = version
+      @condition   = 'fixed_version_id'
+    elsif @filter_by == 'milestone'
+      # Milestone
+      milestone = Milestone.find_by_id_and_project_id(params[:filter_by_milestone_id], @project.id)
+      @start_date = milestone[:start_date]
+      @end_date   = milestone[:end_date]
+      @data_obj   = milestone
+      @condition   = 'milestone_id'
+    elsif @filter_by == 'iteration'
+      # Iteration
+      iteration = Iteration.find_by_id_and_project_id(params[:filter_by_iteration_id], @project.id)
+      @start_date = iteration[:start_date]
+      @end_date   = iteration[:end_date]
+      @data_obj   = iteration
+      @condition   = 'iteration_id'
+    else
+      # Project
+      @start_date = @project.get_start_date
+    end
+  end
+
+  def count_chart_for_project(project, data_obj, condition, start_date, end_date, burndown = false)
     # Sum total hours
     @total_hours = 0
 
@@ -158,8 +200,12 @@ class GraphController < ApplicationController
       @total_hours = @total_hours + estimated_hours
     end
 
-    # Prepare ideal line
-    @ideal_line = generate_line(0, @total_hours, start_date, end_date)
+    # Prepare ideal line (burn up / down switch from-to)
+    if burndown
+      @ideal_line = generate_line(@total_hours, 0, start_date, end_date)
+    else
+      @ideal_line = generate_line(0, @total_hours, start_date, end_date)
+    end
 
     # Right line
     @current_line = []
@@ -169,8 +215,8 @@ class GraphController < ApplicationController
       # Temporary record
       rec = BurndownRecord.new(:day => date, :sub_time => 0, :add_time => 0)
 
-      # Add time (opossite)
-      rec.sub_time = JournalDetail.find(
+      # Sub time
+      rec.add_time = JournalDetail.find(
             :first,
             :select => "SUM(#{JournalDetail.table_name}.value - #{JournalDetail.table_name}.old_value) AS diff",
             :joins => "
@@ -192,8 +238,12 @@ class GraphController < ApplicationController
             ]
           ).try(:diff).to_f.round(3)
 
-      # Sub time! ( find all time entries in propriet day
-      rec.add_time = TimeEntry.sum(
+      # If BURNdown first item needs to have total ++
+      if @current_line.count == 0 && burndown
+        rec.add_time = rec.add_time + @total_hours
+      end
+
+      rec.sub_time = TimeEntry.sum(
                         :hours,
                         :joins => "INNER JOIN #{Issue.table_name} ON #{Issue.table_name}.id = #{TimeEntry.table_name}.issue_id",
                         :conditions => [
@@ -206,13 +256,13 @@ class GraphController < ApplicationController
                         ]).to_f.round(3)
 
       # Add to record
-      if rec.add_time > 0 || rec.sub_time > 0
+      if rec.add_time > 0 || rec.sub_time > 0 || @current_line.count == 0
         @current_line << rec
       end
     end
   end
 
-  # Generate Line with Su-So
+  # Generate Line without weekends
   def generate_line(from, to, start_date, end_date)
     # Line points
     lines = []

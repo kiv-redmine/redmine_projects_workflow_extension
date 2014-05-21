@@ -8,7 +8,7 @@ module RedmineProjectWorkflowExtension
     module ProjectPatch
        def self.included(base)
         base.class_eval do
-          safe_attributes :start_date, :end_date
+          safe_attributes :start_date, :end_date, :total_estimated_time
 
           # Validations - start_date is required
           validate :start_date_validation, :end_date_validation
@@ -62,6 +62,11 @@ module RedmineProjectWorkflowExtension
               date.end_of_day
             ]
           ).try(:diff).to_f.round(3)
+        end
+
+        # Update total estimated time
+        def update_total_estimated_time
+          update_attributes(:total_estimated_time => get_total_time)
         end
 
         # Get total time

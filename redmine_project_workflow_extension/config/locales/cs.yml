@@ -21,6 +21,8 @@ cs:
   label_chart_hours: "Hodiny"
   label_chart_dates: "Datumy"
 
+  label_roadmap_show_completed: "Zobraz všechny splněné"
+
   label_show_milestones: "Zobrazit milníky"
   label_draw_all: "Všechny"
   label_show_versions: "Zobrazit verze"
@@ -37,6 +39,7 @@ cs:
 
   label_charts_menu: "Grafy"
   label_burndown_chart: "Burndown graf"
+  label_burnup_chart: "Burnup graf"
   label_issue_status_chart: "Stav úkolů"
 
   error_date_overleap: "Začátek musí být dříve než konec!"

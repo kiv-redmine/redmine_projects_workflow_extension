@@ -8,11 +8,11 @@
     <ul>
       <% @versions.each do |version| %>
         <li>
-          <%= link_to version.name,  { :controller => :graph, :action => :show_plot_band, :project_id => @project, :type => 'version', :id => version.id } , :remote => true %>
+          <%= link_to_remote version.name, { :url => { :controller => :graph, :action => :show_plot_band, :project_id => @project, :type => 'version', :id => version.id } } %>
         </li>
       <% end %>
       <li>
-        <%= link_to l(:label_draw_all),  {:controller => :graph, :action => :show_plot_band, :project_id => @project, :type => 'version', :id => 'all' } , :remote => true %>
+        <%= link_to_remote l(:label_draw_all), { :url => {:controller => :graph, :action => :show_plot_band, :project_id => @project, :type => 'version', :id => 'all' } } %>
       </li>
     </ul>
   <% end %>
@@ -21,11 +21,11 @@
     <ul>
       <% @milestones.each do |milestone| %>
         <li>
-          <%= link_to milestone.name,  { :controller => :graph, :action => :show_plot_band, :project_id => @project, :type => 'milestone', :id => milestone.id }, :remote => true %>
+          <%= link_to_remote milestone.name, { :url => { :controller => :graph, :action => :show_plot_band, :project_id => @project, :type => 'milestone', :id => milestone.id } } %>
         </li>
       <% end %>
       <li>
-        <%= link_to l(:label_draw_all),  {:controller => :graph, :action => :show_plot_band, :project_id => @project, :type => 'milestone', :id => 'all' }, :remote => true %>
+        <%= link_to_remote l(:label_draw_all), { :url => {:controller => :graph, :action => :show_plot_band, :project_id => @project, :type => 'milestone', :id => 'all' } } %>
       </li>
     </ul>
   <% end %>
@@ -34,28 +34,28 @@
     <ul>
       <% @iterations.each do |iteration| %>
         <li>
-          <%= link_to iteration.name,  { :controller => :graph, :action => :show_plot_band, :project_id => @project, :type => 'iteration', :id => iteration.id }, :remote => true %>
+          <%= link_to_remote iteration.name, { :url => { :controller => :graph, :action => :show_plot_band, :project_id => @project, :type => 'iteration', :id => iteration.id } } %>
         </li>
       <% end %>
       <li>
-      <%= link_to l(:label_draw_all), {:controller => :graph, :action => :show_plot_band, :project_id => @project, :type => 'iteration', :id => 'all' }, :remote => true %>
+        <%= link_to_remote l(:label_draw_all), { :url => {:controller => :graph, :action => :show_plot_band, :project_id => @project, :type => 'iteration', :id => 'all' } } %>
       </li>
     </ul>
   <% end %>
 <% end %>
 
-<h2><%= l(:label_burndown_chart) %></h2>
+<h2><%= l(:label_burnup_chart) %></h2>
 
 <script type="text/javascript">
 var chart;
-$(function(){
-    var $tooltip = $('#tooltip');
+document.observe('dom:loaded', function(){
+    var $tooltip = $('tooltip');
     $tooltip.hide();
-    var $text = $('#tooltiptext');
+    var $text = $('tooltiptext');
     displayTooltip = function (text, left) {
-        $text.html(text);
+        $text.innerText = text;
         $tooltip.show();
-        $tooltip.attr['style'] = 'left: ' + parseInt(left)  + 'px';
+        $tooltip.attributes['style'].value = 'left: ' + parseInt(left)  + 'px';
     };
     var timer;
     hideTooltip = function (e) {
@@ -95,7 +95,7 @@ chart = new Highcharts.Chart({
   series: [
           { name: "<%= l(:label_chart_estimated_time) %>", data: [ <%= print_chart_line(@ideal_line) %> ] }
           <% if @current_line %>
-              ,{ name: "<%= l(:label_chart_total_time) %>", data: [ <%= print_burn_down(@current_line) %> ]}
+              ,{ name: "<%= l(:label_chart_total_time) %>", data: [ <%= print_burn_up(@current_line) %> ]}
           <% end %>
         ]
   });
@@ -115,7 +115,7 @@ chart = new Highcharts.Chart({
   }
 </style>
 
-<%= form_tag({ :controller => :graph, :action => :burndown, :project_id => @project }, :method => :get, :id => 'graph_form') do %>
+<%= form_tag({ :controller => :graph, :action => :burnup, :project_id => @project }, :method => :get, :id => 'graph_form') do %>
   <fieldset id="filters" class="collapsible">
     <legend onclick="toggleFieldset(this);"><%= l(:label_filter_plural) %></legend>
     <div>
