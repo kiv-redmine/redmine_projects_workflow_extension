@@ -55,7 +55,7 @@ RAILS_ENV=production rake burndown:generate_all
 
 <img src="https://raw.github.com/Strnadj/redmine13_project_workflow_extension/master/readme_data/roadmap.png" alt="Project roadmap"  style="box-shadow: 5px 5px rgba(0, 0, 0, .5);" />
 
-### Project start date
+### Project start &amp; end date
 
 <img src="https://raw.github.com/Strnadj/redmine13_project_workflow_extension/master/readme_data/project.png" alt="Project start date" />
 
