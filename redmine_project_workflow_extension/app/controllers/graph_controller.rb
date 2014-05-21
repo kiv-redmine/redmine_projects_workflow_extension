@@ -78,7 +78,7 @@ class GraphController < ApplicationController
       # First not exists or date is greather than start date?
       if first_rec == nil || first_rec.day.to_date != @project.get_start_date
         # Create new
-        rec = BurndownRecord.new(:day => @project.get_start_date, :sub_time => 0, :add_time => 0)
+        rec = BurndownRecord.new(:day => @project.get_start_date.to_datetime, :sub_time => 0, :add_time => 0)
 
         # Add on first place of current line
         @current_line.insert(0, rec)
@@ -109,7 +109,7 @@ class GraphController < ApplicationController
       # First not exists or date is greather than start date?
       if first_rec == nil || first_rec.day.to_date != @project.get_start_date
         # Create new
-        rec = BurndownRecord.new(:day => @project.get_start_date, :sub_time => 0, :add_time => total_hours)
+        rec = BurndownRecord.new(:day => @project.get_start_date.to_datetime, :sub_time => 0, :add_time => total_hours)
 
         # Add on first place of current line
         @current_line.insert(0, rec)
@@ -213,7 +213,7 @@ class GraphController < ApplicationController
     # Day, by day create records
     (start_date..end_date).each do |date|
       # Temporary record
-      rec = BurndownRecord.new(:day => date, :sub_time => 0, :add_time => 0)
+      rec = BurndownRecord.new(:day => date.to_datetime, :sub_time => 0, :add_time => 0)
 
       # Sub time
       rec.add_time = JournalDetail.find(
