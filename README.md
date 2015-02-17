@@ -2,7 +2,7 @@
 
 ## Informations
 
-* This plugin is only for Redmine 1.3
+* This plugin is only for Redmine 1.3 and 2.4 (see branch *redmine2*)
 * This plugin was developed as my semestral work for KIV/JET on
   University on West Bohemia (http://www.zcu.cz)
 * More informations in features
